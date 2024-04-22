@@ -19,7 +19,8 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.button_8.clicked.connect(lambda : self.push_8())
         self.button_9.clicked.connect(lambda : self.push_9())
 
-
+# -----------------------------------------------------------------------------
+# Checks
     def length_check(self):
         if len(Logic.nums_in_box) <= 26:
             return True
@@ -32,6 +33,10 @@ class Logic(QMainWindow, Ui_MainWindow):
         else:
             return False
 
+# -----------------------------------------------------------------
+# Calculator Buttons
+# ------------------
+# Numbers
     def push_0(self):
         if self.box_empty_check() == True:
             self.label_calculations.setText('0')
@@ -121,3 +126,6 @@ class Logic(QMainWindow, Ui_MainWindow):
             if self.length_check() == True:
                 self.label_calculations.setText(f'{''.join(Logic.nums_in_box)}9')
                 Logic.nums_in_box.append('9')
+
+# ------------------
+# Math Functions
