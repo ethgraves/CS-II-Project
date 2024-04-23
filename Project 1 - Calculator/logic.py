@@ -36,6 +36,9 @@ class Logic(QMainWindow, Ui_MainWindow):
             return False
 
     def box_empty_check(self):
+        print(Logic.nums_in_box)
+        print(Logic.nums_in_box2)
+        print()
         if (Logic.nums_in_box[0] == '-') or (Logic.nums_in_box[0] == 0 and Logic.math_function >= 1) or (Logic.nums_in_box[0] == 1 and Logic.math_function >= 1):
             return True
         else:
@@ -138,12 +141,13 @@ class Logic(QMainWindow, Ui_MainWindow):
 # ------------------
 # Math Functions
     def plus(self):
-        self.label_calculations.setText('')
-        Logic.nums_in_box2[0] = int(''.join(Logic.nums_in_box))
-        #Logic.nums_in_box2[0] = int(Logic.nums_in_box2[0])
+        Logic.nums_in_box2.append(int(''.join(Logic.nums_in_box)))
         Logic.nums_in_box = ['-']
         Logic.math_function = 'plus'
         Logic.function_count += 1
+        print(Logic.nums_in_box)
+        print(Logic.nums_in_box2)
+        print()
 
     def subtract(self):
         pass
@@ -155,6 +159,12 @@ class Logic(QMainWindow, Ui_MainWindow):
         pass
 
     def equal(self):
+        Logic.function_count = 0
+        Logic.nums_in_box2 = Logic.nums_in_box2[1::]
         if Logic.math_function == 'plus':
-            Logic.nums_in_box[0] = int(''.join(Logic.nums_in_box))
-            self.label_calculations.setText(f'= {Logic.nums_in_box2[0] + Logic.nums_in_box[0]}')
+            Logic.nums_in_box2.append(int(''.join(Logic.nums_in_box)))
+            self.label_calculations.setText(f'= {sum(Logic.nums_in_box2)}')
+        print(Logic.nums_in_box)
+        print(Logic.nums_in_box2)
+        print()
+
