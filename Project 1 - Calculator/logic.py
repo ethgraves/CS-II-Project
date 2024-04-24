@@ -3,21 +3,29 @@ from gui import *
 
 class Logic(QMainWindow, Ui_MainWindow):
     nums_in_box = ['-']
+    math_function = []
+    nums_for_calculation = []
+    function_count = 0
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
-        self.button_0.clicked.connect(lambda : self.push_0())
-        self.button_1.clicked.connect(lambda : self.push_1())
-        self.button_2.clicked.connect(lambda : self.push_2())
-        self.button_3.clicked.connect(lambda : self.push_3())
-        self.button_4.clicked.connect(lambda : self.push_4())
-        self.button_5.clicked.connect(lambda : self.push_5())
-        self.button_6.clicked.connect(lambda : self.push_6())
-        self.button_7.clicked.connect(lambda : self.push_7())
-        self.button_8.clicked.connect(lambda : self.push_8())
-        self.button_9.clicked.connect(lambda : self.push_9())
+        self.button_0.clicked.connect(lambda: self.push_0())
+        self.button_1.clicked.connect(lambda: self.push_1())
+        self.button_2.clicked.connect(lambda: self.push_2())
+        self.button_3.clicked.connect(lambda: self.push_3())
+        self.button_4.clicked.connect(lambda: self.push_4())
+        self.button_5.clicked.connect(lambda: self.push_5())
+        self.button_6.clicked.connect(lambda: self.push_6())
+        self.button_7.clicked.connect(lambda: self.push_7())
+        self.button_8.clicked.connect(lambda: self.push_8())
+        self.button_9.clicked.connect(lambda: self.push_9())
+        self.button_plus.clicked.connect(lambda: self.plus())
+        self.button_subtract.clicked.connect(lambda: self.subtract())
+        self.button_multiply.clicked.connect(lambda: self.multiply())
+        self.button_divide.clicked.connect(lambda: self.divide())
+        self.button_equal.clicked.connect(lambda: self.equal())
 
 # -----------------------------------------------------------------------------
 # Checks
@@ -28,7 +36,7 @@ class Logic(QMainWindow, Ui_MainWindow):
             return False
 
     def box_empty_check(self):
-        if Logic.nums_in_box[0] == '-':
+        if (Logic.nums_in_box[0] == '-') or (Logic.nums_in_box[0] == 0 and Logic.math_function >= 1) or (Logic.nums_in_box[0] == 1 and Logic.math_function >= 1):
             return True
         else:
             return False
@@ -129,3 +137,51 @@ class Logic(QMainWindow, Ui_MainWindow):
 
 # ------------------
 # Math Functions
+    def plus(self):
+        Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
+        Logic.nums_in_box = ['-']
+        Logic.math_function = 'plus'
+        Logic.function_count += 1
+
+    def subtract(self):
+        Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
+        Logic.nums_in_box = ['-']
+        Logic.math_function = 'subtract'
+        Logic.function_count += 1
+
+    def multiply(self):
+        Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
+        Logic.nums_in_box = ['-']
+        Logic.math_function = 'multiply'
+        Logic.function_count += 1
+
+    def divide(self):
+        Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
+        Logic.nums_in_box = ['-']
+        Logic.math_function = 'divide'
+        Logic.function_count += 1
+
+    def equal(self):
+        Logic.function_count = 0
+        Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
+        Logic.nums_in_box = ['-']
+        if Logic.math_function == 'plus':
+            if len(Logic.nums_for_calculation) == 1:
+                Logic.nums_for_calculation.append(0)
+            self.label_calculations.setText(f'= {sum(Logic.nums_for_calculation)}')
+            Logic.nums_for_calculation = []
+        elif Logic.math_function == 'subtract':
+            if len(Logic.nums_for_calculation) == 1:
+                Logic.nums_for_calculation.append(0)
+            self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] - Logic.nums_for_calculation[1]}')
+            Logic.nums_for_calculation = []
+        elif Logic.math_function == 'multiply':
+            if len(Logic.nums_for_calculation) == 1:
+                Logic.nums_for_calculation.append(1)
+            self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] * Logic.nums_for_calculation[1]}')
+            Logic.nums_for_calculation = []
+        elif Logic.math_function == 'divide':
+            if len(Logic.nums_for_calculation) == 1:
+                Logic.nums_for_calculation.append(1)
+            self.label_calculations.setText(f'= {(Logic.nums_for_calculation[0] / Logic.nums_for_calculation[1]):.2f}')
+            Logic.nums_for_calculation = []
