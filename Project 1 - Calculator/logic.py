@@ -3,8 +3,8 @@ from gui import *
 
 class Logic(QMainWindow, Ui_MainWindow):
     nums_in_box = ['-']
-    math_function = '-'
-    nums_in_box2 = ['-']
+    math_function = []
+    nums_for_calculation = []
     function_count = 0
 
     def __init__(self):
@@ -37,7 +37,7 @@ class Logic(QMainWindow, Ui_MainWindow):
 
     def box_empty_check(self):
         print(Logic.nums_in_box)
-        print(Logic.nums_in_box2)
+        print(Logic.nums_for_calculation)
         print()
         if (Logic.nums_in_box[0] == '-') or (Logic.nums_in_box[0] == 0 and Logic.math_function >= 1) or (Logic.nums_in_box[0] == 1 and Logic.math_function >= 1):
             return True
@@ -141,12 +141,12 @@ class Logic(QMainWindow, Ui_MainWindow):
 # ------------------
 # Math Functions
     def plus(self):
-        Logic.nums_in_box2.append(int(''.join(Logic.nums_in_box)))
+        Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
         Logic.nums_in_box = ['-']
         Logic.math_function = 'plus'
         Logic.function_count += 1
         print(Logic.nums_in_box)
-        print(Logic.nums_in_box2)
+        print(Logic.nums_for_calculation)
         print()
 
     def subtract(self):
@@ -160,11 +160,13 @@ class Logic(QMainWindow, Ui_MainWindow):
 
     def equal(self):
         Logic.function_count = 0
-        Logic.nums_in_box2 = Logic.nums_in_box2[1::]
+        Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
+        Logic.nums_in_box = ['-']
         if Logic.math_function == 'plus':
-            Logic.nums_in_box2.append(int(''.join(Logic.nums_in_box)))
-            self.label_calculations.setText(f'= {sum(Logic.nums_in_box2)}')
+            if len(Logic.nums_for_calculation) == 1:
+                Logic.nums_for_calculation.append(0)
+            self.label_calculations.setText(f'= {sum(Logic.nums_for_calculation)}')
+            Logic.nums_for_calculation = []
         print(Logic.nums_in_box)
-        print(Logic.nums_in_box2)
+        print(Logic.nums_for_calculation)
         print()
-
