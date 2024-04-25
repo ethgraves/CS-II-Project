@@ -185,4 +185,11 @@ class Logic(QMainWindow, Ui_MainWindow):
                 Logic.nums_for_calculation.append(1)
             self.label_calculations.setText(f'= {(Logic.nums_for_calculation[0] / Logic.nums_for_calculation[1]):.2f}')
             Logic.nums_for_calculation = []
-            #filler
+
+# ------------------
+# Mode Button
+    def mode(self):
+        if self.radioButton.setEnabled(False):
+            self.radioButton.setEnabled(True)
+        else:
+            self.radioButton.setEnabled(False)
