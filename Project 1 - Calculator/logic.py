@@ -37,6 +37,9 @@ class Logic(QMainWindow, Ui_MainWindow):
             return False
 
     def box_empty_check(self):
+        print(Logic.nums_in_box)
+        print(Logic.nums_for_calculation)
+        print()
         if (Logic.nums_in_box[0] == '-') or (Logic.nums_in_box[0] == 0 and Logic.math_function >= 1) or (Logic.nums_in_box[0] == 1 and Logic.math_function >= 1):
             return True
         else:
@@ -174,11 +177,16 @@ class Logic(QMainWindow, Ui_MainWindow):
         if Logic.nums_in_box != '-':
             Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
         Logic.nums_in_box = ['-']
+        self.total = Logic.nums_for_calculation[0]
         if Logic.math_function == 'plus':
             if Logic.nums_in_box[0] == '-' and len(Logic.nums_for_calculation) == 1:
-                self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] + Logic.nums_for_calculation[0]}')
+                self.total += self.total
+                self.label_calculations.setText(f'= {self.total}')
             else:
-                self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] + Logic.nums_for_calculation[1]}')
+                for x in len(Logic.nums_for_calculation):
+                    if x != 0:
+                        self.total += Logic.nums_for_calculation[x]
+                self.label_calculations.setText(f'= {self.total}')
             Logic.nums_for_calculation = []
         elif Logic.math_function == 'subtract':
             if len(Logic.nums_for_calculation) == 1:
@@ -198,5 +206,3 @@ class Logic(QMainWindow, Ui_MainWindow):
             else:
                 self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] / Logic.nums_for_calculation[1]}')
             Logic.nums_for_calculation = []
-
-            # test2
