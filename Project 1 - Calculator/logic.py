@@ -199,4 +199,4 @@ class Logic(QMainWindow, Ui_MainWindow):
                 self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] / Logic.nums_for_calculation[1]}')
             Logic.nums_for_calculation = []
 
-            # test
+            # test2
