@@ -1,3 +1,4 @@
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import *
 from gui import *
 
@@ -136,12 +137,19 @@ class Logic(QMainWindow, Ui_MainWindow):
                 Logic.nums_in_box.append('9')
 
 # ------------------
-# Math Functions
+# Math Functions (F = plus, subtract, multiply, or divide)
+# F --> F --> Equal : the two numbers result in one number as a result of F
+# F --> Equal : number used on the other number for the F
+# F --> F --> F --> ... --> Equal : number takes previous function to combine numbers
+
     def plus(self):
         Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
         Logic.nums_in_box = ['-']
         Logic.math_function = 'plus'
         Logic.function_count += 1
+        print(Logic.nums_in_box)
+        print(Logic.nums_for_calculation)
+        print()
 
     def subtract(self):
         Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
@@ -163,25 +171,32 @@ class Logic(QMainWindow, Ui_MainWindow):
 
     def equal(self):
         Logic.function_count = 0
-        Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
+        if Logic.nums_in_box != '-':
+            Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
         Logic.nums_in_box = ['-']
         if Logic.math_function == 'plus':
-            if len(Logic.nums_for_calculation) == 1:
-                Logic.nums_for_calculation.append(0)
-            self.label_calculations.setText(f'= {sum(Logic.nums_for_calculation)}')
+            if Logic.nums_in_box[0] == '-' and len(Logic.nums_for_calculation) == 1:
+                self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] + Logic.nums_for_calculation[0]}')
+            else:
+                self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] + Logic.nums_for_calculation[1]}')
             Logic.nums_for_calculation = []
         elif Logic.math_function == 'subtract':
             if len(Logic.nums_for_calculation) == 1:
-                Logic.nums_for_calculation.append(0)
-            self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] - Logic.nums_for_calculation[1]}')
+                self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] - Logic.nums_for_calculation[0]}')
+            else:
+                self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] - Logic.nums_for_calculation[1]}')
             Logic.nums_for_calculation = []
         elif Logic.math_function == 'multiply':
             if len(Logic.nums_for_calculation) == 1:
-                Logic.nums_for_calculation.append(1)
-            self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] * Logic.nums_for_calculation[1]}')
+                self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] * Logic.nums_for_calculation[0]}')
+            else:
+                self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] * Logic.nums_for_calculation[1]}')
             Logic.nums_for_calculation = []
         elif Logic.math_function == 'divide':
             if len(Logic.nums_for_calculation) == 1:
-                Logic.nums_for_calculation.append(1)
-            self.label_calculations.setText(f'= {(Logic.nums_for_calculation[0] / Logic.nums_for_calculation[1]):.2f}')
+                self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] / Logic.nums_for_calculation[0]}')
+            else:
+                self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] / Logic.nums_for_calculation[1]}')
             Logic.nums_for_calculation = []
+
+            # test
