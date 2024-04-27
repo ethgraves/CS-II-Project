@@ -35,6 +35,7 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.radio_triangle_pyramid.clicked.connect(lambda: self.triangle_pyramid())
         self.radio_equilateral_cone.clicked.connect(lambda: self.equilateral_cone())
         self.radio_hypotenuse_cylinder.clicked.connect(lambda: self.hypotenuse_cylinder())
+        self.pushButton_submit.clicked.connect(lambda: self.submit())
 
 # -----------------------------------------------------------------------------
 # Checks
@@ -49,6 +50,20 @@ class Logic(QMainWindow, Ui_MainWindow):
             return True
         else:
             return False
+
+    def area_or_volume_check(self):
+        if self.radio_square_cube.isChecked():
+            self.square_cube()
+        elif self.radio_rectangle_cuboid.isChecked():
+            self.rectangle_cuboid()
+        elif self.radio_circle_sphere.isChecked():
+            self.circle_sphere()
+        elif self.radio_triangle_pyramid.isChecked():
+            self.triangle_pyramid()
+        elif self.radio_equilateral_cone.isChecked():
+            self.equilateral_cone()
+        elif self.radio_hypotenuse_cylinder.isChecked():
+            self.hypotenuse_cylinder()
 
 # -----------------------------------------------------------------
 # Calculator Buttons
@@ -205,7 +220,7 @@ class Logic(QMainWindow, Ui_MainWindow):
         Circle: p * r^2
         Triangle: (b * h) / 2
         Equilateral Triangle: (sqrt(3) / 4) * s^2
-        Hypotenuse: sqrt(b^2 * h^2)
+        Hypotenuse: sqrt(b^2 + h^2)
     Volumes:
         Cube: s^3
         Cuboid: l * b * h
@@ -216,11 +231,11 @@ class Logic(QMainWindow, Ui_MainWindow):
     '''
     def area(self):
         Logic.area_or_volume = 0
-        print(Logic.area_or_volume)
+        self.area_or_volume_check()
 
     def volume(self):
         Logic.area_or_volume = 1
-        print(Logic.area_or_volume)
+        self.area_or_volume_check()
 
     def square_cube(self):
         if Logic.area_or_volume == 0:
@@ -255,13 +270,91 @@ class Logic(QMainWindow, Ui_MainWindow):
             self.lineEdit_bottom.setEnabled(True)
 
     def circle_sphere(self):
-        pass
+        if Logic.area_or_volume == 0:
+            self.label_top.setText('Radius')
+            self.lineEdit_top.setEnabled(True)
+            self.label_middle.setText('')
+            self.lineEdit_middle.setEnabled(False)
+            self.label_bottom.setText('')
+            self.lineEdit_bottom.setEnabled(False)
+        elif Logic.area_or_volume == 1:
+            self.label_top.setText('Radius')
+            self.lineEdit_top.setEnabled(True)
+            self.label_middle.setText('')
+            self.lineEdit_middle.setEnabled(False)
+            self.label_bottom.setText('')
+            self.lineEdit_bottom.setEnabled(False)
 
     def triangle_pyramid(self):
-        pass
+        if Logic.area_or_volume == 0:
+            self.label_top.setText('Base')
+            self.lineEdit_top.setEnabled(True)
+            self.label_middle.setText('Height')
+            self.lineEdit_middle.setEnabled(True)
+            self.label_bottom.setText('')
+            self.lineEdit_bottom.setEnabled(False)
+        elif Logic.area_or_volume == 1:
+            self.label_top.setText('Length')
+            self.lineEdit_top.setEnabled(True)
+            self.label_middle.setText('Width')
+            self.lineEdit_middle.setEnabled(True)
+            self.label_bottom.setText('Height')
+            self.lineEdit_bottom.setEnabled(True)
 
     def equilateral_cone(self):
-        pass
+        if Logic.area_or_volume == 0:
+            self.label_top.setText('Side')
+            self.lineEdit_top.setEnabled(True)
+            self.label_middle.setText('')
+            self.lineEdit_middle.setEnabled(False)
+            self.label_bottom.setText('')
+            self.lineEdit_bottom.setEnabled(False)
+        elif Logic.area_or_volume == 1:
+            self.label_top.setText('Radius')
+            self.lineEdit_top.setEnabled(True)
+            self.label_middle.setText('Height')
+            self.lineEdit_middle.setEnabled(True)
+            self.label_bottom.setText('')
+            self.lineEdit_bottom.setEnabled(False)
 
     def hypotenuse_cylinder(self):
-        pass
+        if Logic.area_or_volume == 0:
+            self.label_top.setText('Base')
+            self.lineEdit_top.setEnabled(True)
+            self.label_middle.setText('Height')
+            self.lineEdit_middle.setEnabled(True)
+            self.label_bottom.setText('')
+            self.lineEdit_bottom.setEnabled(False)
+        elif Logic.area_or_volume == 1:
+            self.label_top.setText('Radius')
+            self.lineEdit_top.setEnabled(True)
+            self.label_middle.setText('Height')
+            self.lineEdit_middle.setEnabled(True)
+            self.label_bottom.setText('')
+            self.lineEdit_bottom.setEnabled(False)
+
+    def submit(self):
+        #FIXME: Exceptions don't work
+        if self.radio_square_cube.isChecked():
+            side = self.lineEdit_top.text()
+            while True:
+                try:
+                    side = float(side)
+                except:
+                    if side == '':
+                        self.label_calculations.setText('One or more inputs are blank')
+                    else:
+                        self.label_calculations.setText('Enter a number for inputs')
+                else:
+                    break
+            self.label_calculations.setText(f'Area = {side ** 2}')
+        elif self.radio_rectangle_cuboid.isChecked():
+            self.rectangle_cuboid()
+        elif self.radio_circle_sphere.isChecked():
+            self.circle_sphere()
+        elif self.radio_triangle_pyramid.isChecked():
+            self.triangle_pyramid()
+        elif self.radio_equilateral_cone.isChecked():
+            self.equilateral_cone()
+        elif self.radio_hypotenuse_cylinder.isChecked():
+            self.hypotenuse_cylinder()
