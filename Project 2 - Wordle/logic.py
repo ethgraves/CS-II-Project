@@ -10,6 +10,8 @@ class Logic(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
+        self.__box = 0
+
         # Home Page
         self.pushButton_guest.clicked.connect(lambda: self.guest())
 
@@ -40,20 +42,36 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.pushButton_B.clicked.connect(lambda: self.letter_guess('B'))
         self.pushButton_N.clicked.connect(lambda: self.letter_guess('N'))
         self.pushButton_M.clicked.connect(lambda: self.letter_guess('M'))
+        self.pushButton_DELETE.clicked.connect(lambda: self.delete())
 
+# ------------------------------------------------------
+    # Getters and Setters
+    def get_box(self):
+        return self.__box
 
+    def set_box(self, value):
+        if value == 1:
+            self.__box += value
+        elif value == -1:
+            self.__box -= 1
+        elif value == 0:
+            self.__box = value
 
+# ------------------------------------------------------
     # Checks
     def letters_check(self, letter):
-        box = 0
+        self.set_box(0)
         for r in range(len(Logic.guess)):
             for c in range(5):
-                box += 1
+                self.set_box(1)
                 if Logic.guess[r][c] == '-':
                     Logic.guess[r][c] = letter
-                    return box
+                    return self.get_box()
 
+# ------------------------------------------------------
+    # Functions
     def adding_letter(self, letter, box):
+        print(Logic.guess)
         if box == 1:
             self.label_R1_C1.setText(letter)
         elif box == 2:
@@ -65,12 +83,20 @@ class Logic(QMainWindow, Ui_MainWindow):
         elif box == 5:
             self.label_R1_C5.setText(letter)
 
+    def delete(self):
+        for c in range(4, -1, -1):
+            if Logic.guess[-1][c] != '-':
+                Logic.guess[-1][c] = '-'
+                self.adding_letter('', self.get_box())
+                self.set_box(-1)
+                break
 
+# ------------------------------------------------------
     # Home Page
     def guest(self):
         self.stackedWidget.setCurrentIndex(1)
 
-
+# ------------------------------------------------------
     # Game Page
     def letter_guess(self, letter):
         box = self.letters_check(letter)
