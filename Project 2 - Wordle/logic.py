@@ -191,3 +191,5 @@ class Logic(QMainWindow, Ui_MainWindow):
     def letter_guess(self, letter):
         box = self.letters_check(letter)
         self.adding_letter(letter, box)
+
+# test
