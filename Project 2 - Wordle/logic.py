@@ -1,16 +1,29 @@
 from PyQt6.QtWidgets import *
 from gui import *
+import random
 
 class Logic(QMainWindow, Ui_MainWindow):
     guess = [
         ['-', '-', '-', '-', '-']
     ]
+    colors = ['-', '-', '-', '-', '-']
+
+    with open('words_to_guess.txt', 'r') as file:
+        all_words = file.readlines()
+        word_to_guess = all_words[random.randint(0, (len(all_words) - 1))]
+        word_to_guess = word_to_guess[0:-1]
+
+        word_to_guess_letters = [*word_to_guess]
+        word_to_guess_letters_copy = word_to_guess_letters[:]
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
         self.__box = 0
+
+        # DEBUG for Testing
+        self.label_debug.setText(Logic.word_to_guess)
 
         # Home Page
         self.pushButton_guest.clicked.connect(lambda: self.guest())
@@ -85,6 +98,64 @@ class Logic(QMainWindow, Ui_MainWindow):
                 else:
                     self.label_valid_or_not.setText('Not a valid word')
                     return False
+
+    def check_for_win(self, word_letters):
+        Logic.guess[-1] = [x.lower() for x in Logic.guess[-1]]
+        for a in range(0, 5):
+            if Logic.guess[-1][a] == Logic.word_to_guess_letters[a]:
+                Logic.colors[a] = 'background-color: rgb(0, 255, 0)'
+                Logic.word_to_guess_letters[a] = '-'
+        for b in range(0, 5):
+            if Logic.guess[-1][b] in Logic.word_to_guess_letters:
+                for c in range(0, 5):
+                    if Logic.guess[-1][b] == Logic.word_to_guess_letters[c]:
+                        Logic.colors[c] = 'background-color: rgb(255, 255, 0)'
+                        Logic.word_to_guess_letters[c] = '-'
+        for d in range(0 ,5):
+            if Logic.word_to_guess_letters[d] != '-':
+                Logic.colors[d] = 'background-color: rgb(150, 150, 150)'
+        Logic.word_to_guess_letters = Logic.word_to_guess_letters_copy[:]
+        print(Logic.word_to_guess_letters)
+        print(Logic.colors)
+
+    def coloring(self):
+        if len(Logic.guess) == 1:
+            self.label_R1_C1.setStyleSheet(Logic.colors[0])
+            self.label_R1_C2.setStyleSheet(Logic.colors[1])
+            self.label_R1_C3.setStyleSheet(Logic.colors[2])
+            self.label_R1_C4.setStyleSheet(Logic.colors[3])
+            self.label_R1_C5.setStyleSheet(Logic.colors[4])
+        elif len(Logic.guess) == 2:
+            self.label_R2_C1.setStyleSheet(Logic.colors[0])
+            self.label_R2_C2.setStyleSheet(Logic.colors[1])
+            self.label_R2_C3.setStyleSheet(Logic.colors[2])
+            self.label_R2_C4.setStyleSheet(Logic.colors[3])
+            self.label_R2_C5.setStyleSheet(Logic.colors[4])
+        elif len(Logic.guess) == 3:
+            self.label_R3_C1.setStyleSheet(Logic.colors[0])
+            self.label_R3_C2.setStyleSheet(Logic.colors[1])
+            self.label_R3_C3.setStyleSheet(Logic.colors[2])
+            self.label_R3_C4.setStyleSheet(Logic.colors[3])
+            self.label_R3_C5.setStyleSheet(Logic.colors[4])
+        elif len(Logic.guess) == 4:
+            self.label_R4_C1.setStyleSheet(Logic.colors[0])
+            self.label_R4_C2.setStyleSheet(Logic.colors[1])
+            self.label_R4_C3.setStyleSheet(Logic.colors[2])
+            self.label_R4_C4.setStyleSheet(Logic.colors[3])
+            self.label_R4_C5.setStyleSheet(Logic.colors[4])
+        elif len(Logic.guess) == 5:
+            self.label_R5_C1.setStyleSheet(Logic.colors[0])
+            self.label_R5_C2.setStyleSheet(Logic.colors[1])
+            self.label_R5_C3.setStyleSheet(Logic.colors[2])
+            self.label_R5_C4.setStyleSheet(Logic.colors[3])
+            self.label_R5_C5.setStyleSheet(Logic.colors[4])
+        elif len(Logic.guess) == 6:
+            self.label_R6_C1.setStyleSheet(Logic.colors[0])
+            self.label_R6_C2.setStyleSheet(Logic.colors[1])
+            self.label_R6_C3.setStyleSheet(Logic.colors[2])
+            self.label_R6_C4.setStyleSheet(Logic.colors[3])
+            self.label_R6_C5.setStyleSheet(Logic.colors[4])
+        Logic.colors = ['-', '-', '-', '-', '-']
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Functions
@@ -178,6 +249,14 @@ class Logic(QMainWindow, Ui_MainWindow):
     def enter(self):
         self.word_letters = Logic.guess[-1]
         if self.valid_word_check(self.word_letters) == True:
+            win = self.check_for_win(self.word_letters)
+            #TODO: Add events for winning and losing
+            if win == False:
+                pass
+            else:
+                pass
+            self.coloring()
+
             Logic.guess.append(['-', '-', '-', '-', '-'])
             self.set_box(5)
 
@@ -191,5 +270,3 @@ class Logic(QMainWindow, Ui_MainWindow):
     def letter_guess(self, letter):
         box = self.letters_check(letter)
         self.adding_letter(letter, box)
-
-# test
