@@ -37,6 +37,10 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.radio_equilateral_cone.clicked.connect(lambda: self.equilateral_cone())
         self.radio_hypotenuse_cylinder.clicked.connect(lambda: self.hypotenuse_cylinder())
         self.pushButton_submit.clicked.connect(lambda: self.submit())
+        self.button_clear.clicked.connect(lambda: self.clear())
+        self.button_del.clicked.connect(lambda: self.delete())
+        self.button_decimal.clicked.connect(lambda: self.decimal())
+        self.button_negative.clicked.connect(lambda: self.negative())
 
 # -----------------------------------------------------------------------------
 # Checks
@@ -47,9 +51,8 @@ class Logic(QMainWindow, Ui_MainWindow):
             return False
 
     def box_empty_check(self):
-        print(Logic.nums_in_box)
-        print(Logic.nums_for_calculation)
-        if (Logic.nums_in_box[0] == '-') or (Logic.nums_in_box[0] == 0 and Logic.math_function >= 1) or (Logic.nums_in_box[0] == 1 and Logic.math_function >= 1):
+        #if (Logic.nums_in_box[0] == '-') or (Logic.nums_in_box[0] == 0 and Logic.math_function >= 1) or (Logic.nums_in_box[0] == 1 and Logic.math_function >= 1):
+        if Logic.nums_in_box[0] == '-':
             return True
         else:
             return False
@@ -73,6 +76,14 @@ class Logic(QMainWindow, Ui_MainWindow):
 # ------------------
 # Numbers
     def push_0(self):
+        # print(Logic.nums_in_box)
+        # print(Logic.nums_for_calculation)
+        # print(Logic.math_function)
+        # if Logic.math_function == 'divide':
+        #     print('test')
+        # print(Logic.nums_in_box)
+        # print(Logic.nums_for_calculation)
+        # print(Logic.math_function)
         if self.box_empty_check() == True:
             self.label_calculations.setText('0')
             Logic.nums_in_box[0] = '0'
@@ -172,11 +183,9 @@ class Logic(QMainWindow, Ui_MainWindow):
             for x in range(0, len(Logic.nums_for_calculation)):
                 if Logic.nums_for_calculation[x] == '-':
                     Logic.nums_for_calculation[x] = 0
-            Logic.nums_for_calculation = [int(x) for x in Logic.nums_for_calculation]
+            Logic.nums_for_calculation = [float(x) for x in Logic.nums_for_calculation]
             Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] + Logic.nums_for_calculation[1]
             Logic.nums_for_calculation = Logic.nums_for_calculation[:1:]
-        print(Logic.nums_in_box)
-        print(Logic.nums_for_calculation)
         Logic.math_function = 'plus'
 
     def subtract(self):
@@ -187,11 +196,9 @@ class Logic(QMainWindow, Ui_MainWindow):
             for x in range(0, len(Logic.nums_for_calculation)):
                 if Logic.nums_for_calculation[x] == '-':
                     Logic.nums_for_calculation[x] = 0
-            Logic.nums_for_calculation = [int(x) for x in Logic.nums_for_calculation]
+            Logic.nums_for_calculation = [float(x) for x in Logic.nums_for_calculation]
             Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] - Logic.nums_for_calculation[1]
             Logic.nums_for_calculation = Logic.nums_for_calculation[:1:]
-        print(Logic.nums_in_box)
-        print(Logic.nums_for_calculation)
         Logic.math_function = 'subtract'
 
     def multiply(self):
@@ -202,11 +209,9 @@ class Logic(QMainWindow, Ui_MainWindow):
             for x in range(0, len(Logic.nums_for_calculation)):
                 if Logic.nums_for_calculation[x] == '-':
                     Logic.nums_for_calculation[x] = 1
-            Logic.nums_for_calculation = [int(x) for x in Logic.nums_for_calculation]
+            Logic.nums_for_calculation = [float(x) for x in Logic.nums_for_calculation]
             Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] * Logic.nums_for_calculation[1]
             Logic.nums_for_calculation = Logic.nums_for_calculation[:1:]
-        print(Logic.nums_in_box)
-        print(Logic.nums_for_calculation)
         Logic.math_function = 'multiply'
 
     def divide(self):
@@ -217,14 +222,12 @@ class Logic(QMainWindow, Ui_MainWindow):
             for x in range(0, len(Logic.nums_for_calculation)):
                 if Logic.nums_for_calculation[x] == '-':
                     Logic.nums_for_calculation[x] = 1
-            Logic.nums_for_calculation = [int(x) for x in Logic.nums_for_calculation]
+            Logic.nums_for_calculation = [float(x) for x in Logic.nums_for_calculation]
             # if Logic.nums_for_calculation[1] == 0:
             #     Logic.divide_by_zero = True
             # else:
             Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] / Logic.nums_for_calculation[1]
             Logic.nums_for_calculation = Logic.nums_for_calculation[:1:]
-            print(Logic.nums_in_box)
-            print(Logic.nums_for_calculation)
             Logic.math_function = 'divide'
 
     def equal(self):
@@ -235,13 +238,34 @@ class Logic(QMainWindow, Ui_MainWindow):
         elif Logic.math_function == 'multiply':
             self.multiply()
         elif Logic.math_function == 'divide':
-            if Logic.divide_by_zero == True:
-                self.label_calculations.setText(f'69')
-            else:
-                self.divide()
+            # FIXME
+            # if Logic.divide_by_zero == True:
+            #     self.label_calculations.setText(f'69')
+            # else:
+            self.divide()
         self.label_calculations.setText(f'= {Logic.nums_for_calculation[0]}')
-        print(Logic.nums_in_box)
-        print(Logic.nums_for_calculation)
+
+# ------------------
+# Addition Buttons
+
+    def clear(self):
+        Logic.nums_in_box = ['-']
+        Logic.nums_for_calculation = []
+        Logic.math_function = ''
+        self.label_calculations.setText('')
+
+    def delete(self):
+        if Logic.nums_in_box[0] == '-':
+            self.clear()
+        else:
+            Logic.nums_in_box.pop(-1)
+            self.label_calculations.setText(f'{''.join(Logic.nums_in_box)}')
+
+    def decimal(self):
+        pass
+
+    def negative(self):
+        pass
 
 # ------------------
 # Area and Volume
