@@ -344,7 +344,6 @@ class Ui_MainWindow(object):
         self.radio_volume.setText(_translate("MainWindow", "Volume"))
         self.radio_hypotenuse_cylinder.setText(_translate("MainWindow", "Hypotenuse"))
         self.pushButton_submit.setText(_translate("MainWindow", "Submit"))
-        self.radio_equilateral_cone.setText(_translate("MainWindow", "Equilateral Tri."))
 
 
 if __name__ == "__main__":
