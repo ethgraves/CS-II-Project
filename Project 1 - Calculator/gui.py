@@ -346,6 +346,7 @@ class Ui_MainWindow(object):
         self.pushButton_submit.setText(_translate("MainWindow", "Submit"))
 
 
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
