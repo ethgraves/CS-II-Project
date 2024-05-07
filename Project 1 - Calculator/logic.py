@@ -6,6 +6,8 @@ class Logic(QMainWindow, Ui_MainWindow):
     math_function = ''
     nums_for_calculation = []
     area_or_volume = 0
+    divide_by_zero = False
+    divide_determiner = False
 
     def __init__(self):
         super().__init__()
@@ -216,11 +218,14 @@ class Logic(QMainWindow, Ui_MainWindow):
                 if Logic.nums_for_calculation[x] == '-':
                     Logic.nums_for_calculation[x] = 1
             Logic.nums_for_calculation = [int(x) for x in Logic.nums_for_calculation]
+            # if Logic.nums_for_calculation[1] == 0:
+            #     Logic.divide_by_zero = True
+            # else:
             Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] / Logic.nums_for_calculation[1]
             Logic.nums_for_calculation = Logic.nums_for_calculation[:1:]
-        print(Logic.nums_in_box)
-        print(Logic.nums_for_calculation)
-        Logic.math_function = 'divide'
+            print(Logic.nums_in_box)
+            print(Logic.nums_for_calculation)
+            Logic.math_function = 'divide'
 
     def equal(self):
         if Logic.math_function == 'plus':
@@ -230,32 +235,13 @@ class Logic(QMainWindow, Ui_MainWindow):
         elif Logic.math_function == 'multiply':
             self.multiply()
         elif Logic.math_function == 'divide':
-            self.divide()
+            if Logic.divide_by_zero == True:
+                self.label_calculations.setText(f'69')
+            else:
+                self.divide()
         self.label_calculations.setText(f'= {Logic.nums_for_calculation[0]}')
         print(Logic.nums_in_box)
         print(Logic.nums_for_calculation)
-        # if Logic.math_function == 'plus':
-        #     for x in range(0, len(Logic.nums_for_calculation)):
-        #         if Logic.nums_for_calculation[x] == '-':
-        #             Logic.nums_for_calculation[x] = 0
-        #     Logic.nums_for_calculation = [int(x) for x in Logic.nums_for_calculation]
-        #     self.label_calculations.setText(f'= {sum(Logic.nums_for_calculation)}')
-        #     Logic.nums_for_calculation = []
-        # elif Logic.math_function == 'subtract':
-        #     if len(Logic.nums_for_calculation) == 1:
-        #         Logic.nums_for_calculation.append(0)
-        #     self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] - Logic.nums_for_calculation[1]}')
-        #     Logic.nums_for_calculation = []
-        # elif Logic.math_function == 'multiply':
-        #     if len(Logic.nums_for_calculation) == 1:
-        #         Logic.nums_for_calculation.append(1)
-        #     self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] * Logic.nums_for_calculation[1]}')
-        #     Logic.nums_for_calculation = []
-        # elif Logic.math_function == 'divide':
-        #     if len(Logic.nums_for_calculation) == 1:
-        #         Logic.nums_for_calculation.append(1)
-        #     self.label_calculations.setText(f'= {(Logic.nums_for_calculation[0] / Logic.nums_for_calculation[1]):.2f}')
-        #     Logic.nums_for_calculation = []
 
 # ------------------
 # Area and Volume
