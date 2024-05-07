@@ -99,6 +99,7 @@ class Logic(QMainWindow, Ui_MainWindow):
                     self.label_valid_or_not.setText('Not a valid word')
                     return False
 
+    #FIXME: Fix coloring stuff
     def check_for_win(self, word_letters):
         Logic.guess[-1] = [x.lower() for x in Logic.guess[-1]]
         for a in range(0, 5):
