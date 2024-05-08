@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import *
 from gui import *
 
 class Logic(QMainWindow, Ui_MainWindow):
-    nums_in_box = ['-']
+    nums_in_box = ['~']
     math_function = ''
     nums_for_calculation = []
     area_or_volume = 0
@@ -51,8 +51,8 @@ class Logic(QMainWindow, Ui_MainWindow):
             return False
 
     def box_empty_check(self):
-        #if (Logic.nums_in_box[0] == '-') or (Logic.nums_in_box[0] == 0 and Logic.math_function >= 1) or (Logic.nums_in_box[0] == 1 and Logic.math_function >= 1):
-        if Logic.nums_in_box[0] == '-':
+        #if (Logic.nums_in_box[0] == '~') or (Logic.nums_in_box[0] == 0 and Logic.math_function >= 1) or (Logic.nums_in_box[0] == 1 and Logic.math_function >= 1):
+        if Logic.nums_in_box[0] == '~':
             return True
         else:
             return False
@@ -76,14 +76,6 @@ class Logic(QMainWindow, Ui_MainWindow):
 # ------------------
 # Numbers
     def push_0(self):
-        # print(Logic.nums_in_box)
-        # print(Logic.nums_for_calculation)
-        # print(Logic.math_function)
-        # if Logic.math_function == 'divide':
-        #     print('test')
-        # print(Logic.nums_in_box)
-        # print(Logic.nums_for_calculation)
-        # print(Logic.math_function)
         if self.box_empty_check() == True:
             self.label_calculations.setText('0')
             Logic.nums_in_box[0] = '0'
@@ -178,10 +170,10 @@ class Logic(QMainWindow, Ui_MainWindow):
     def plus(self):
         Logic.math_function = ''
         Logic.nums_for_calculation.append(''.join(Logic.nums_in_box))
-        Logic.nums_in_box = ['-']
+        Logic.nums_in_box = ['~']
         if len(Logic.nums_for_calculation) > 1:
             for x in range(0, len(Logic.nums_for_calculation)):
-                if Logic.nums_for_calculation[x] == '-':
+                if Logic.nums_for_calculation[x] == '~':
                     Logic.nums_for_calculation[x] = 0
             Logic.nums_for_calculation = [float(x) for x in Logic.nums_for_calculation]
             Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] + Logic.nums_for_calculation[1]
@@ -191,10 +183,10 @@ class Logic(QMainWindow, Ui_MainWindow):
     def subtract(self):
         Logic.math_function = ''
         Logic.nums_for_calculation.append(''.join(Logic.nums_in_box))
-        Logic.nums_in_box = ['-']
+        Logic.nums_in_box = ['~']
         if len(Logic.nums_for_calculation) > 1:
             for x in range(0, len(Logic.nums_for_calculation)):
-                if Logic.nums_for_calculation[x] == '-':
+                if Logic.nums_for_calculation[x] == '~':
                     Logic.nums_for_calculation[x] = 0
             Logic.nums_for_calculation = [float(x) for x in Logic.nums_for_calculation]
             Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] - Logic.nums_for_calculation[1]
@@ -204,10 +196,10 @@ class Logic(QMainWindow, Ui_MainWindow):
     def multiply(self):
         Logic.math_function = ''
         Logic.nums_for_calculation.append(''.join(Logic.nums_in_box))
-        Logic.nums_in_box = ['-']
+        Logic.nums_in_box = ['~']
         if len(Logic.nums_for_calculation) > 1:
             for x in range(0, len(Logic.nums_for_calculation)):
-                if Logic.nums_for_calculation[x] == '-':
+                if Logic.nums_for_calculation[x] == '~':
                     Logic.nums_for_calculation[x] = 1
             Logic.nums_for_calculation = [float(x) for x in Logic.nums_for_calculation]
             Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] * Logic.nums_for_calculation[1]
@@ -215,57 +207,83 @@ class Logic(QMainWindow, Ui_MainWindow):
         Logic.math_function = 'multiply'
 
     def divide(self):
+        print(Logic.nums_in_box)
+        print(Logic.nums_for_calculation)
+        Logic.divide_by_zero = True
         Logic.math_function = ''
         Logic.nums_for_calculation.append(''.join(Logic.nums_in_box))
-        Logic.nums_in_box = ['-']
+        Logic.nums_in_box = ['~']
         if len(Logic.nums_for_calculation) > 1:
             for x in range(0, len(Logic.nums_for_calculation)):
-                if Logic.nums_for_calculation[x] == '-':
+                if Logic.nums_for_calculation[x] == '~':
                     Logic.nums_for_calculation[x] = 1
             Logic.nums_for_calculation = [float(x) for x in Logic.nums_for_calculation]
-            # if Logic.nums_for_calculation[1] == 0:
-            #     Logic.divide_by_zero = True
-            # else:
-            Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] / Logic.nums_for_calculation[1]
+            try:
+                Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] / Logic.nums_for_calculation[1]
+            except:
+                Logic.nums_for_calculation = ['DBV']
             Logic.nums_for_calculation = Logic.nums_for_calculation[:1:]
-            Logic.math_function = 'divide'
+        Logic.math_function = 'divide'
+        print(Logic.nums_in_box)
+        print(Logic.nums_for_calculation)
 
     def equal(self):
-        if Logic.math_function == 'plus':
-            self.plus()
-        elif Logic.math_function == 'subtract':
-            self.subtract()
-        elif Logic.math_function == 'multiply':
-            self.multiply()
-        elif Logic.math_function == 'divide':
-            # FIXME
-            # if Logic.divide_by_zero == True:
-            #     self.label_calculations.setText(f'69')
-            # else:
-            self.divide()
-        self.label_calculations.setText(f'= {Logic.nums_for_calculation[0]}')
+        try:
+            if Logic.math_function == 'plus':
+                self.plus()
+            elif Logic.math_function == 'subtract':
+                self.subtract()
+            elif Logic.math_function == 'multiply':
+                self.multiply()
+            elif Logic.math_function == 'divide':
+                self.divide()
+            if Logic.nums_for_calculation == ['DBV']:
+                self.clear()
+                self.label_calculations.setText('Cannot Divide by Zero')
+            else:
+                self.label_calculations.setText(f'= {Logic.nums_for_calculation[0]}')
+        except:
+            self.clear()
 
 # ------------------
 # Addition Buttons
 
     def clear(self):
-        Logic.nums_in_box = ['-']
+        Logic.nums_in_box = ['~']
         Logic.nums_for_calculation = []
         Logic.math_function = ''
         self.label_calculations.setText('')
 
     def delete(self):
-        if Logic.nums_in_box[0] == '-':
+        try:
+            if Logic.nums_in_box[0] == '~':
+                self.clear()
+            else:
+                Logic.nums_in_box.pop(-1)
+                self.label_calculations.setText(f'{''.join(Logic.nums_in_box)}')
+        except:
             self.clear()
-        else:
-            Logic.nums_in_box.pop(-1)
-            self.label_calculations.setText(f'{''.join(Logic.nums_in_box)}')
 
     def decimal(self):
-        pass
+        if '.' not in ''.join(Logic.nums_in_box):
+            if self.box_empty_check() == True:
+                self.label_calculations.setText('0.')
+                Logic.nums_in_box[0] = '0.'
+            else:
+                if self.length_check() == True:
+                    self.label_calculations.setText(f'{''.join(Logic.nums_in_box)}.')
+                    Logic.nums_in_box.append('.')
 
     def negative(self):
-        pass
+        print('Test')
+        if '-' not in ''.join(Logic.nums_in_box):
+            if self.box_empty_check() == True:
+                self.label_calculations.setText('-0')
+                Logic.nums_in_box[0] = '-0'
+            else:
+                if self.length_check() == True:
+                    self.label_calculations.setText(f'-{''.join(Logic.nums_in_box)}')
+                    Logic.nums_in_box.insert(0, '-')
 
 # ------------------
 # Area and Volume
