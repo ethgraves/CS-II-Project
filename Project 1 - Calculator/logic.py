@@ -13,9 +13,6 @@ class Logic(QMainWindow, Ui_MainWindow):
     nums_in_box = ['~']
     math_function = ''
     nums_for_calculation = []
-    area_or_volume = 0
-    divide_by_zero = False
-    divide_determiner = False
 
     def __init__(self):
         super().__init__()
@@ -215,9 +212,6 @@ class Logic(QMainWindow, Ui_MainWindow):
         Logic.math_function = 'multiply'
 
     def divide(self):
-        print(Logic.nums_in_box)
-        print(Logic.nums_for_calculation)
-        Logic.divide_by_zero = True
         Logic.math_function = ''
         Logic.nums_for_calculation.append(''.join(Logic.nums_in_box))
         Logic.nums_in_box = ['~']
@@ -232,8 +226,6 @@ class Logic(QMainWindow, Ui_MainWindow):
                 Logic.nums_for_calculation = ['DBV']
             Logic.nums_for_calculation = Logic.nums_for_calculation[:1:]
         Logic.math_function = 'divide'
-        print(Logic.nums_in_box)
-        print(Logic.nums_for_calculation)
 
     def equal(self):
         try:
@@ -283,7 +275,6 @@ class Logic(QMainWindow, Ui_MainWindow):
                     Logic.nums_in_box.append('.')
 
     def negative(self):
-        print('Test')
         if '-' not in ''.join(Logic.nums_in_box):
             if self.box_empty_check() == True:
                 self.label_calculations.setText('-0')
