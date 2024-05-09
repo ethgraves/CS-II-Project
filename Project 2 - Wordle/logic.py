@@ -105,15 +105,17 @@ class Logic(QMainWindow, Ui_MainWindow):
         for a in range(0, 5):
             if Logic.guess[-1][a] == Logic.word_to_guess_letters[a]:
                 Logic.colors[a] = 'background-color: rgb(0, 255, 0)'
-                Logic.word_to_guess_letters[a] = '-'
+                Logic.guess[-1][a] = '-'
+                Logic.word_to_guess_letters[a] = '~'
         for b in range(0, 5):
             if Logic.guess[-1][b] in Logic.word_to_guess_letters:
                 for c in range(0, 5):
                     if Logic.guess[-1][b] == Logic.word_to_guess_letters[c]:
-                        Logic.colors[c] = 'background-color: rgb(255, 255, 0)'
-                        Logic.word_to_guess_letters[c] = '-'
+                        Logic.colors[b] = 'background-color: rgb(255, 255, 0)'
+                        Logic.guess[-1][b] = '-'
+                        Logic.word_to_guess_letters[c] = '~'
         for d in range(0 ,5):
-            if Logic.word_to_guess_letters[d] != '-':
+            if Logic.colors[d] == '-':
                 Logic.colors[d] = 'background-color: rgb(150, 150, 150)'
         Logic.word_to_guess_letters = Logic.word_to_guess_letters_copy[:]
         print(Logic.word_to_guess_letters)
