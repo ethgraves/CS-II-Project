@@ -4,9 +4,8 @@ import math
 
 # FIXME:
 '''
-1. Delete text when switching to different area/volume functions
-2. Figure out what to do for displaying to a certain decimal point
-3. With the negative, make sure it goes from -0 --> -[num] instead of -0 --> -0[num]
+1. Figure out what to do for displaying to a certain decimal point
+2. With the negative, make sure it goes from -0 --> -[num] instead of -0 --> -0[num]
 '''
 
 class Logic(QMainWindow, Ui_MainWindow):
@@ -585,7 +584,6 @@ class Logic(QMainWindow, Ui_MainWindow):
                 else:
                     self.label_calculations.setText(f'Area = {(1 / 3) * math.pi * (radius ** 2) * height}')
 
-        # FIXME: Hypotenuse gives wrong answer
         elif self.radio_hypotenuse_cylinder.isChecked():
             if self.radio_area.isChecked():
                 side1 = self.lineEdit_top.text()
