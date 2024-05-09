@@ -325,10 +325,13 @@ class Logic(QMainWindow, Ui_MainWindow):
         if self.radio_area.isChecked():
             self.label_top.setText('Side')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('')
             self.lineEdit_middle.setEnabled(False)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
         elif self.radio_volume.isChecked():
             self.label_top.setText('Side')
             self.lineEdit_top.setEnabled(True)
@@ -336,86 +339,116 @@ class Logic(QMainWindow, Ui_MainWindow):
             self.lineEdit_middle.setEnabled(False)
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
 
     def rectangle_cuboid(self):
         if self.radio_area.isChecked():
             self.label_top.setText('Base')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('Height')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
         elif self.radio_volume.isChecked():
             self.label_top.setText('Length')
             self.lineEdit_top.setEnabled(True)
             self.label_middle.setText('Base')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('Height')
             self.lineEdit_bottom.setEnabled(True)
+            self.lineEdit_bottom.setText('')
 
     def circle_sphere(self):
         if self.radio_area.isChecked():
             self.label_top.setText('Radius')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('')
             self.lineEdit_middle.setEnabled(False)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
         elif self.radio_volume.isChecked():
             self.label_top.setText('Radius')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('')
             self.lineEdit_middle.setEnabled(False)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
 
     def triangle_pyramid(self):
         if self.radio_area.isChecked():
             self.label_top.setText('Base')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('Height')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
         elif self.radio_volume.isChecked():
             self.label_top.setText('Length')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('Width')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('Height')
             self.lineEdit_bottom.setEnabled(True)
+            self.lineEdit_bottom.setText('')
 
     def equilateral_cone(self):
         if self.radio_area.isChecked():
             self.label_top.setText('Side')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('')
             self.lineEdit_middle.setEnabled(False)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
         elif self.radio_volume.isChecked():
             self.label_top.setText('Radius')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('Height')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
 
     def hypotenuse_cylinder(self):
         if self.radio_area.isChecked():
-            self.label_top.setText('Base')
+            self.label_top.setText('Side One')
             self.lineEdit_top.setEnabled(True)
-            self.label_middle.setText('Height')
+            self.lineEdit_top.setText('')
+            self.label_middle.setText('Side Two')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
         elif self.radio_volume.isChecked():
             self.label_top.setText('Radius')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('Height')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
 
     def submit(self):
         if self.radio_square_cube.isChecked():
@@ -555,18 +588,18 @@ class Logic(QMainWindow, Ui_MainWindow):
         # FIXME: Hypotenuse gives wrong answer
         elif self.radio_hypotenuse_cylinder.isChecked():
             if self.radio_area.isChecked():
-                base = self.lineEdit_top.text()
-                height = self.lineEdit_middle.text()
+                side1 = self.lineEdit_top.text()
+                side2 = self.lineEdit_middle.text()
                 try:
-                    base = float(base)
-                    height = float(height)
+                    side1 = float(side1)
+                    side2 = float(side2)
                 except:
-                    if base == '' or height == '':
+                    if side1 == '' or side2 == '':
                         self.label_calculations.setText('One or more inputs are blank')
                     else:
                         self.label_calculations.setText('Enter a number for inputs')
                 else:
-                    self.label_calculations.setText(f'Area = {math.sqrt((base ** 2) * (height ** 2))}')
+                    self.label_calculations.setText(f'Area = {math.sqrt((side1 ** 2) + (side2 ** 2))}')
             elif self.radio_volume.isChecked():
                 radius = self.lineEdit_top.text()
                 height = self.lineEdit_middle.text()
