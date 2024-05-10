@@ -2,13 +2,6 @@ from PyQt6.QtWidgets import *
 from gui import *
 import random
 
-# TODO:
-'''
-- Add user system
-- Add winning/losing functions
-
-'''
-
 class Logic(QMainWindow, Ui_MainWindow):
     guess = [
         ['-', '-', '-', '-', '-']
