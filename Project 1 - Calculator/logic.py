@@ -2,12 +2,6 @@ from PyQt6.QtWidgets import *
 from gui import *
 import math
 
-# FIXME:
-'''
-1. Figure out what to do for displaying to a certain decimal point
-2. With the negative, make sure it goes from -0 --> -[num] instead of -0 --> -0[num]
-'''
-
 class Logic(QMainWindow, Ui_MainWindow):
     nums_in_box = ['~']
     math_function = ''
@@ -276,8 +270,8 @@ class Logic(QMainWindow, Ui_MainWindow):
     def negative(self):
         if '-' not in ''.join(Logic.nums_in_box):
             if self.box_empty_check() == True:
-                self.label_calculations.setText('-0')
-                Logic.nums_in_box[0] = '-0'
+                self.label_calculations.setText('-')
+                Logic.nums_in_box[0] = '-'
             else:
                 if self.length_check() == True:
                     self.label_calculations.setText(f'-{''.join(Logic.nums_in_box)}')
