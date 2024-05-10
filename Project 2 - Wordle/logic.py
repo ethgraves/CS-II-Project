@@ -32,6 +32,8 @@ class Logic(QMainWindow, Ui_MainWindow):
 
         # Home Page
         self.pushButton_guest.clicked.connect(lambda: self.guest())
+        self.pushButton_login.clicked.connect(lambda: self.login())
+        self.pushButton_signup.clicked.connect(lambda: self.signup())
 
         # Game Page
         self.pushButton_Q.clicked.connect(lambda: self.letter_guess('Q'))
@@ -62,10 +64,14 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.pushButton_M.clicked.connect(lambda: self.letter_guess('M'))
         self.pushButton_DELETE.clicked.connect(lambda: self.delete())
         self.pushButton_ENTER.clicked.connect(lambda: self.enter())
-        self.pushButton_login.clicked.connect(lambda: self.login())
-        self.pushButton_signup.clicked.connect(lambda: self.signup())
+
+        # Results Page
         self.pushButton_playAgain.clicked.connect(lambda: self.play_again())
         self.pushButton_logout.clicked.connect(lambda: self.logout())
+        self.pushButton_stats.clicked.connect(lambda: self.see_stats())
+
+        # Stats Page
+
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Getters and Setters
@@ -722,6 +728,7 @@ class Logic(QMainWindow, Ui_MainWindow):
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Home Page
     def guest(self):
+        Logic.username = 'guest_account.txt'
         self.stackedWidget.setCurrentIndex(1)
         Logic.word_to_guess_determiner = 0
         self.get_word_to_guess()
@@ -764,6 +771,9 @@ class Logic(QMainWindow, Ui_MainWindow):
 
     def logout(self):
         print(Logic.username)
+
+    def see_stats(self):
+        pass
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
