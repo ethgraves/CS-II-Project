@@ -16,25 +16,17 @@ class Logic(QMainWindow, Ui_MainWindow):
     colors = ['-', '-', '-', '-', '-']
     letters = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
 
+    word_to_guess_determiner = 0
+    word_to_guess_letters = []
+    word_to_guess_letters_copy = []
+
     num_guesses = 0
-
-    with open('words_to_guess.txt', 'r') as file:
-        all_words = file.readlines()
-        word_to_guess = all_words[random.randint(0, (len(all_words) - 1))]
-        word_to_guess = word_to_guess[0:-1]
-
-        word_to_guess_letters = [*word_to_guess]
-        word_to_guess_letters_copy = word_to_guess_letters[:]
-
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
         self.__box = 0
-
-        # DEBUG
-        self.label_debug.setText(Logic.word_to_guess)
 
         # Home Page
         self.pushButton_guest.clicked.connect(lambda: self.guest())
@@ -68,6 +60,8 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.pushButton_M.clicked.connect(lambda: self.letter_guess('M'))
         self.pushButton_DELETE.clicked.connect(lambda: self.delete())
         self.pushButton_ENTER.clicked.connect(lambda: self.enter())
+        self.pushButton_login.clicked.connect(lambda: self.login())
+        self.pushButton_playAgain.clicked.connect(lambda: self.play_again())
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Getters and Setters
@@ -83,6 +77,33 @@ class Logic(QMainWindow, Ui_MainWindow):
             self.__box = value
         else:
             self.__box += value
+
+    def word_to_guess(self):
+        random.seed = random.randint(0,100000)
+        with open('words_to_guess.txt', 'r') as file:
+            all_words = file.readlines()
+            word_to_guess = all_words[random.randint(0, (len(all_words) - 1))]
+            word_to_guess = word_to_guess[0:-1]
+
+            word_to_guess_letters = [*word_to_guess]
+            word_to_guess_letters_copy = word_to_guess_letters[:]
+
+        return word_to_guess_letters, word_to_guess_letters_copy
+
+    def get_word_to_guess(self):
+        if Logic.word_to_guess_determiner == 0:
+            word_to_guess_letters, word_to_guess_letters_copy = self.word_to_guess()
+            Logic.word_to_guess_letters = word_to_guess_letters
+            Logic.word_to_guess_letters_copy = word_to_guess_letters_copy
+            Logic.word_to_guess_determiner = 1
+        else:
+            word_to_guess_letters = Logic.word_to_guess_letters
+            word_to_guess_letters_copy = Logic.word_to_guess_letters_copy
+
+        self.label_debug.setText(''.join(word_to_guess_letters))
+        return word_to_guess_letters, word_to_guess_letters_copy
+
+
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Checks
@@ -114,10 +135,15 @@ class Logic(QMainWindow, Ui_MainWindow):
                     return False
 
     def check_for_win(self, word_letters):
+        print(1)
+        print(Logic.word_to_guess_letters)
         Logic.guess[-1] = [x.lower() for x in Logic.guess[-1]]
         for a in range(0, 5):
+            print(2)
             if Logic.guess[-1][a] == Logic.word_to_guess_letters[a]:
+                print(3)
                 Logic.colors[a] = 'background-color: rgb(0, 255, 0)'
+                print(4)
                 self.coloring_keyboard(Logic.guess[-1][a], 'background-color: rgb(0, 255, 0)')
                 Logic.guess[-1][a] = '-'
                 Logic.word_to_guess_letters[a] = '~'
@@ -572,6 +598,100 @@ class Logic(QMainWindow, Ui_MainWindow):
         elif box == 30:
             self.label_R6_C5.setText(letter)
 
+    def clear_game(self):
+        self.label_R1_C1.setText('')
+        self.label_R1_C2.setText('')
+        self.label_R1_C3.setText('')
+        self.label_R1_C4.setText('')
+        self.label_R1_C5.setText('')
+        self.label_R2_C1.setText('')
+        self.label_R2_C2.setText('')
+        self.label_R2_C3.setText('')
+        self.label_R2_C4.setText('')
+        self.label_R2_C5.setText('')
+        self.label_R3_C1.setText('')
+        self.label_R3_C2.setText('')
+        self.label_R3_C3.setText('')
+        self.label_R3_C4.setText('')
+        self.label_R3_C5.setText('')
+        self.label_R4_C1.setText('')
+        self.label_R4_C2.setText('')
+        self.label_R4_C3.setText('')
+        self.label_R4_C4.setText('')
+        self.label_R4_C5.setText('')
+        self.label_R5_C1.setText('')
+        self.label_R5_C2.setText('')
+        self.label_R5_C3.setText('')
+        self.label_R5_C4.setText('')
+        self.label_R5_C5.setText('')
+        self.label_R6_C1.setText('')
+        self.label_R6_C2.setText('')
+        self.label_R6_C3.setText('')
+        self.label_R6_C4.setText('')
+        self.label_R6_C5.setText('')
+        self.label_R1_C1.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R1_C2.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R1_C3.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R1_C4.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R1_C5.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R2_C1.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R2_C2.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R2_C3.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R2_C4.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R2_C5.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R3_C1.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R3_C2.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R3_C3.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R3_C4.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R3_C5.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R4_C1.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R4_C2.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R4_C3.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R4_C4.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R4_C5.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R5_C1.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R5_C2.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R5_C3.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R5_C4.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R5_C5.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R6_C1.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R6_C2.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R6_C3.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R6_C4.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.label_R6_C5.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_Q.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_W.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_E.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_R.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_T.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_Y.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_U.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_I.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_O.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_P.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_A.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_S.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_D.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_F.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_G.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_H.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_J.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_K.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_L.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_Z.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_X.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_C.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_V.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_B.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_N.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.pushButton_M.setStyleSheet('background-color: rgb(255, 255, 255)')
+        self.set_box(0)
+        Logic.letters = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
+        Logic.guess = [['-', '-', '-', '-', '-']]
+        Logic.colors = ['-', '-', '-', '-', '-']
+        Logic.num_guesses = 0
+
+
     def delete(self):
         for c in range(4, -1, -1):
             if Logic.guess[-1][c] != '-':
@@ -602,7 +722,10 @@ class Logic(QMainWindow, Ui_MainWindow):
     # Home Page
     def guest(self):
         self.stackedWidget.setCurrentIndex(1)
-        #self.get_word_to_guess()
+        self.get_word_to_guess()
+
+    def login(self):
+        pass
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Game Page
@@ -613,4 +736,7 @@ class Logic(QMainWindow, Ui_MainWindow):
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Results Page
     def play_again(self):
-        pass
+        self.stackedWidget.setCurrentIndex(1)
+        self.clear_game()
+        Logic.word_to_guess_determiner = 0
+        self.get_word_to_guess()
