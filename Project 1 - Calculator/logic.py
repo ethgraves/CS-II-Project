@@ -1,12 +1,11 @@
 from PyQt6.QtWidgets import *
 from gui import *
+import math
 
 class Logic(QMainWindow, Ui_MainWindow):
-    nums_in_box = ['-']
-    math_function = []
+    nums_in_box = ['~']
+    math_function = ''
     nums_for_calculation = []
-    function_count = 0
-    area_or_volume = 0
 
     def __init__(self):
         super().__init__()
@@ -36,6 +35,10 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.radio_equilateral_cone.clicked.connect(lambda: self.equilateral_cone())
         self.radio_hypotenuse_cylinder.clicked.connect(lambda: self.hypotenuse_cylinder())
         self.pushButton_submit.clicked.connect(lambda: self.submit())
+        self.button_clear.clicked.connect(lambda: self.clear())
+        self.button_del.clicked.connect(lambda: self.delete())
+        self.button_decimal.clicked.connect(lambda: self.decimal())
+        self.button_negative.clicked.connect(lambda: self.negative())
 
 # -----------------------------------------------------------------------------
 # Checks
@@ -46,7 +49,8 @@ class Logic(QMainWindow, Ui_MainWindow):
             return False
 
     def box_empty_check(self):
-        if (Logic.nums_in_box[0] == '-') or (Logic.nums_in_box[0] == 0 and Logic.math_function >= 1) or (Logic.nums_in_box[0] == 1 and Logic.math_function >= 1):
+        #if (Logic.nums_in_box[0] == '~') or (Logic.nums_in_box[0] == 0 and Logic.math_function >= 1) or (Logic.nums_in_box[0] == 1 and Logic.math_function >= 1):
+        if Logic.nums_in_box[0] == '~':
             return True
         else:
             return False
@@ -162,53 +166,116 @@ class Logic(QMainWindow, Ui_MainWindow):
 # ------------------
 # Math Functions
     def plus(self):
-        Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
-        Logic.nums_in_box = ['-']
+        Logic.math_function = ''
+        Logic.nums_for_calculation.append(''.join(Logic.nums_in_box))
+        Logic.nums_in_box = ['~']
+        if len(Logic.nums_for_calculation) > 1:
+            for x in range(0, len(Logic.nums_for_calculation)):
+                if Logic.nums_for_calculation[x] == '~':
+                    Logic.nums_for_calculation[x] = 0
+            Logic.nums_for_calculation = [float(x) for x in Logic.nums_for_calculation]
+            Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] + Logic.nums_for_calculation[1]
+            Logic.nums_for_calculation = Logic.nums_for_calculation[:1:]
         Logic.math_function = 'plus'
-        Logic.function_count += 1
 
     def subtract(self):
-        Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
-        Logic.nums_in_box = ['-']
+        Logic.math_function = ''
+        Logic.nums_for_calculation.append(''.join(Logic.nums_in_box))
+        Logic.nums_in_box = ['~']
+        if len(Logic.nums_for_calculation) > 1:
+            for x in range(0, len(Logic.nums_for_calculation)):
+                if Logic.nums_for_calculation[x] == '~':
+                    Logic.nums_for_calculation[x] = 0
+            Logic.nums_for_calculation = [float(x) for x in Logic.nums_for_calculation]
+            Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] - Logic.nums_for_calculation[1]
+            Logic.nums_for_calculation = Logic.nums_for_calculation[:1:]
         Logic.math_function = 'subtract'
-        Logic.function_count += 1
 
     def multiply(self):
-        Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
-        Logic.nums_in_box = ['-']
+        Logic.math_function = ''
+        Logic.nums_for_calculation.append(''.join(Logic.nums_in_box))
+        Logic.nums_in_box = ['~']
+        if len(Logic.nums_for_calculation) > 1:
+            for x in range(0, len(Logic.nums_for_calculation)):
+                if Logic.nums_for_calculation[x] == '~':
+                    Logic.nums_for_calculation[x] = 1
+            Logic.nums_for_calculation = [float(x) for x in Logic.nums_for_calculation]
+            Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] * Logic.nums_for_calculation[1]
+            Logic.nums_for_calculation = Logic.nums_for_calculation[:1:]
         Logic.math_function = 'multiply'
-        Logic.function_count += 1
 
     def divide(self):
-        Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
-        Logic.nums_in_box = ['-']
+        Logic.math_function = ''
+        Logic.nums_for_calculation.append(''.join(Logic.nums_in_box))
+        Logic.nums_in_box = ['~']
+        if len(Logic.nums_for_calculation) > 1:
+            for x in range(0, len(Logic.nums_for_calculation)):
+                if Logic.nums_for_calculation[x] == '~':
+                    Logic.nums_for_calculation[x] = 1
+            Logic.nums_for_calculation = [float(x) for x in Logic.nums_for_calculation]
+            try:
+                Logic.nums_for_calculation[0] = Logic.nums_for_calculation[0] / Logic.nums_for_calculation[1]
+            except:
+                Logic.nums_for_calculation = ['DBV']
+            Logic.nums_for_calculation = Logic.nums_for_calculation[:1:]
         Logic.math_function = 'divide'
-        Logic.function_count += 1
 
     def equal(self):
-        Logic.function_count = 0
-        Logic.nums_for_calculation.append(int(''.join(Logic.nums_in_box)))
-        Logic.nums_in_box = ['-']
-        if Logic.math_function == 'plus':
-            if len(Logic.nums_for_calculation) == 1:
-                Logic.nums_for_calculation.append(0)
-            self.label_calculations.setText(f'= {sum(Logic.nums_for_calculation)}')
-            Logic.nums_for_calculation = []
-        elif Logic.math_function == 'subtract':
-            if len(Logic.nums_for_calculation) == 1:
-                Logic.nums_for_calculation.append(0)
-            self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] - Logic.nums_for_calculation[1]}')
-            Logic.nums_for_calculation = []
-        elif Logic.math_function == 'multiply':
-            if len(Logic.nums_for_calculation) == 1:
-                Logic.nums_for_calculation.append(1)
-            self.label_calculations.setText(f'= {Logic.nums_for_calculation[0] * Logic.nums_for_calculation[1]}')
-            Logic.nums_for_calculation = []
-        elif Logic.math_function == 'divide':
-            if len(Logic.nums_for_calculation) == 1:
-                Logic.nums_for_calculation.append(1)
-            self.label_calculations.setText(f'= {(Logic.nums_for_calculation[0] / Logic.nums_for_calculation[1]):.2f}')
-            Logic.nums_for_calculation = []
+        try:
+            if Logic.math_function == 'plus':
+                self.plus()
+            elif Logic.math_function == 'subtract':
+                self.subtract()
+            elif Logic.math_function == 'multiply':
+                self.multiply()
+            elif Logic.math_function == 'divide':
+                self.divide()
+            if Logic.nums_for_calculation == ['DBV']:
+                self.clear()
+                self.label_calculations.setText('Cannot Divide by Zero')
+            else:
+                self.label_calculations.setText(f'= {Logic.nums_for_calculation[0]}')
+        except:
+            self.clear()
+
+# ------------------
+# Addition Buttons
+
+    def clear(self):
+        Logic.nums_in_box = ['~']
+        Logic.nums_for_calculation = []
+        Logic.math_function = ''
+        self.label_calculations.setText('')
+
+    def delete(self):
+        try:
+            if Logic.nums_in_box[0] == '~':
+                self.clear()
+            else:
+                Logic.nums_in_box.pop(-1)
+                self.label_calculations.setText(f'{''.join(Logic.nums_in_box)}')
+        except:
+            self.clear()
+
+    def decimal(self):
+        if '.' not in ''.join(Logic.nums_in_box):
+            if self.box_empty_check() == True:
+                self.label_calculations.setText('0.')
+                Logic.nums_in_box[0] = '0.'
+            else:
+                if self.length_check() == True:
+                    self.label_calculations.setText(f'{''.join(Logic.nums_in_box)}.')
+                    Logic.nums_in_box.append('.')
+
+    def negative(self):
+        if '-' not in ''.join(Logic.nums_in_box):
+            if self.box_empty_check() == True:
+                self.label_calculations.setText('-')
+                Logic.nums_in_box[0] = '-'
+            else:
+                if self.length_check() == True:
+                    self.label_calculations.setText(f'-{''.join(Logic.nums_in_box)}')
+                    Logic.nums_in_box.insert(0, '-')
 
 # ------------------
 # Area and Volume
@@ -230,114 +297,156 @@ class Logic(QMainWindow, Ui_MainWindow):
         Cylinder: p * r^2 * h
     '''
     def area(self):
-        Logic.area_or_volume = 0
+        self.radio_square_cube.setText('Square')
+        self.radio_rectangle_cuboid.setText('Rectangle')
+        self.radio_circle_sphere.setText('Circle')
+        self.radio_triangle_pyramid.setText('Triangle')
+        self.radio_equilateral_cone.setText('Equilateral Tri.')
+        self.radio_hypotenuse_cylinder.setText('Hypotenuse')
         self.area_or_volume_check()
 
     def volume(self):
-        Logic.area_or_volume = 1
+        self.radio_square_cube.setText('Cube')
+        self.radio_rectangle_cuboid.setText('Cuboid')
+        self.radio_circle_sphere.setText('Sphere')
+        self.radio_triangle_pyramid.setText('Pyramid')
+        self.radio_equilateral_cone.setText('Cone')
+        self.radio_hypotenuse_cylinder.setText('Cylinder')
         self.area_or_volume_check()
 
     def square_cube(self):
-        if Logic.area_or_volume == 0:
+        if self.radio_area.isChecked():
+            self.label_top.setText('Side')
+            self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
+            self.label_middle.setText('')
+            self.lineEdit_middle.setEnabled(False)
+            self.lineEdit_middle.setText('')
+            self.label_bottom.setText('')
+            self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
+        elif self.radio_volume.isChecked():
             self.label_top.setText('Side')
             self.lineEdit_top.setEnabled(True)
             self.label_middle.setText('')
             self.lineEdit_middle.setEnabled(False)
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
-        elif Logic.area_or_volume == 1:
-            self.label_top.setText('Side')
-            self.lineEdit_top.setEnabled(True)
-            self.label_middle.setText('')
-            self.lineEdit_middle.setEnabled(False)
-            self.label_bottom.setText('')
-            self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
 
     def rectangle_cuboid(self):
-        if Logic.area_or_volume == 0:
+        if self.radio_area.isChecked():
             self.label_top.setText('Base')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('Height')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
-        elif Logic.area_or_volume == 1:
+            self.lineEdit_bottom.setText('')
+        elif self.radio_volume.isChecked():
             self.label_top.setText('Length')
             self.lineEdit_top.setEnabled(True)
             self.label_middle.setText('Base')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('Height')
             self.lineEdit_bottom.setEnabled(True)
+            self.lineEdit_bottom.setText('')
 
     def circle_sphere(self):
-        if Logic.area_or_volume == 0:
+        if self.radio_area.isChecked():
             self.label_top.setText('Radius')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('')
             self.lineEdit_middle.setEnabled(False)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
-        elif Logic.area_or_volume == 1:
+            self.lineEdit_bottom.setText('')
+        elif self.radio_volume.isChecked():
             self.label_top.setText('Radius')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('')
             self.lineEdit_middle.setEnabled(False)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
 
     def triangle_pyramid(self):
-        if Logic.area_or_volume == 0:
+        if self.radio_area.isChecked():
             self.label_top.setText('Base')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('Height')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
-        elif Logic.area_or_volume == 1:
+            self.lineEdit_bottom.setText('')
+        elif self.radio_volume.isChecked():
             self.label_top.setText('Length')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('Width')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('Height')
             self.lineEdit_bottom.setEnabled(True)
+            self.lineEdit_bottom.setText('')
 
     def equilateral_cone(self):
-        if Logic.area_or_volume == 0:
+        if self.radio_area.isChecked():
             self.label_top.setText('Side')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('')
             self.lineEdit_middle.setEnabled(False)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
-        elif Logic.area_or_volume == 1:
+            self.lineEdit_bottom.setText('')
+        elif self.radio_volume.isChecked():
             self.label_top.setText('Radius')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('Height')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
 
     def hypotenuse_cylinder(self):
-        if Logic.area_or_volume == 0:
-            self.label_top.setText('Base')
+        if self.radio_area.isChecked():
+            self.label_top.setText('Side One')
             self.lineEdit_top.setEnabled(True)
-            self.label_middle.setText('Height')
+            self.lineEdit_top.setText('')
+            self.label_middle.setText('Side Two')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
-        elif Logic.area_or_volume == 1:
+            self.lineEdit_bottom.setText('')
+        elif self.radio_volume.isChecked():
             self.label_top.setText('Radius')
             self.lineEdit_top.setEnabled(True)
+            self.lineEdit_top.setText('')
             self.label_middle.setText('Height')
             self.lineEdit_middle.setEnabled(True)
+            self.lineEdit_middle.setText('')
             self.label_bottom.setText('')
             self.lineEdit_bottom.setEnabled(False)
+            self.lineEdit_bottom.setText('')
 
     def submit(self):
-        #FIXME: Exceptions don't work
         if self.radio_square_cube.isChecked():
-            side = self.lineEdit_top.text()
-            while True:
+            if self.radio_area.isChecked():
+                side = self.lineEdit_top.text()
                 try:
                     side = float(side)
                 except:
@@ -346,15 +455,153 @@ class Logic(QMainWindow, Ui_MainWindow):
                     else:
                         self.label_calculations.setText('Enter a number for inputs')
                 else:
-                    break
-            self.label_calculations.setText(f'Area = {side ** 2}')
+                    self.label_calculations.setText(f'Area = {side ** 2}')
+            elif self.radio_volume.isChecked():
+                side = self.lineEdit_top.text()
+                try:
+                    side = float(side)
+                except:
+                    if side == '':
+                        self.label_calculations.setText('One or more inputs are blank')
+                    else:
+                        self.label_calculations.setText('Enter a number for inputs')
+                else:
+                    self.label_calculations.setText(f'Area = {side ** 3}')
+
         elif self.radio_rectangle_cuboid.isChecked():
-            self.rectangle_cuboid()
+            if self.radio_area.isChecked():
+                base = self.lineEdit_top.text()
+                height = self.lineEdit_middle.text()
+                try:
+                    base = float(base)
+                    height = float(height)
+                except:
+                    if base == '' or height == '':
+                        self.label_calculations.setText('One or more inputs are blank')
+                    else:
+                        self.label_calculations.setText('Enter a number for inputs')
+                else:
+                    self.label_calculations.setText(f'Area = {base * height}')
+            elif self.radio_volume.isChecked():
+                length = self.lineEdit_top.text()
+                base = self.lineEdit_middle.text()
+                height = self.lineEdit_bottom.text()
+                try:
+                    length = float(length)
+                    base = float(base)
+                    height = float(height)
+                except:
+                    if length == '' or base == '' or height == '':
+                        self.label_calculations.setText('One or more inputs are blank')
+                    else:
+                        self.label_calculations.setText('Enter a number for inputs')
+                else:
+                    self.label_calculations.setText(f'Area = {length * base * height}')
+
         elif self.radio_circle_sphere.isChecked():
-            self.circle_sphere()
+            if self.radio_area.isChecked():
+                radius = self.lineEdit_top.text()
+                try:
+                    radius = float(radius)
+                except:
+                    if radius == '':
+                        self.label_calculations.setText('One or more inputs are blank')
+                    else:
+                        self.label_calculations.setText('Enter a number for inputs')
+                else:
+                    self.label_calculations.setText(f'Area = {math.pi * (radius ** 2)}')
+            elif self.radio_volume.isChecked():
+                radius = self.lineEdit_top.text()
+                try:
+                    radius = float(radius)
+                except:
+                    if radius == '':
+                        self.label_calculations.setText('One or more inputs are blank')
+                    else:
+                        self.label_calculations.setText('Enter a number for inputs')
+                else:
+                    self.label_calculations.setText(f'Area = {(4 / 3) * math.pi * (radius ** 3)}')
+
         elif self.radio_triangle_pyramid.isChecked():
-            self.triangle_pyramid()
+            if self.radio_area.isChecked():
+                base = self.lineEdit_top.text()
+                height = self.lineEdit_middle.text()
+                try:
+                    base = float(base)
+                    height = float(height)
+                except:
+                    if base == '' or height == '':
+                        self.label_calculations.setText('One or more inputs are blank')
+                    else:
+                        self.label_calculations.setText('Enter a number for inputs')
+                else:
+                    self.label_calculations.setText(f'Area = {(base * height) / 2}')
+            elif self.radio_volume.isChecked():
+                length = self.lineEdit_top.text()
+                width = self.lineEdit_middle.text()
+                height = self.lineEdit_bottom.text()
+                try:
+                    length = float(length)
+                    width = float(width)
+                    height = float(height)
+                except:
+                    if length == '' or width == '' or height == '':
+                        self.label_calculations.setText('One or more inputs are blank')
+                    else:
+                        self.label_calculations.setText('Enter a number for inputs')
+                else:
+                    self.label_calculations.setText(f'Area = {(length * width * height) / 3}')
+
         elif self.radio_equilateral_cone.isChecked():
-            self.equilateral_cone()
+            if self.radio_area.isChecked():
+                side = self.lineEdit_top.text()
+                try:
+                    side = float(side)
+                except:
+                    if side == '':
+                        self.label_calculations.setText('One or more inputs are blank')
+                    else:
+                        self.label_calculations.setText('Enter a number for inputs')
+                else:
+                    self.label_calculations.setText(f'Area = {(math.sqrt(3) / 4) * (side ** 2)}')
+            elif self.radio_volume.isChecked():
+                radius = self.lineEdit_top.text()
+                height = self.lineEdit_middle.text()
+                try:
+                    radius = float(radius)
+                    height = float(height)
+                except:
+                    if radius == '' or height == '':
+                        self.label_calculations.setText('One or more inputs are blank')
+                    else:
+                        self.label_calculations.setText('Enter a number for inputs')
+                else:
+                    self.label_calculations.setText(f'Area = {(1 / 3) * math.pi * (radius ** 2) * height}')
+
         elif self.radio_hypotenuse_cylinder.isChecked():
-            self.hypotenuse_cylinder()
+            if self.radio_area.isChecked():
+                side1 = self.lineEdit_top.text()
+                side2 = self.lineEdit_middle.text()
+                try:
+                    side1 = float(side1)
+                    side2 = float(side2)
+                except:
+                    if side1 == '' or side2 == '':
+                        self.label_calculations.setText('One or more inputs are blank')
+                    else:
+                        self.label_calculations.setText('Enter a number for inputs')
+                else:
+                    self.label_calculations.setText(f'Area = {math.sqrt((side1 ** 2) + (side2 ** 2))}')
+            elif self.radio_volume.isChecked():
+                radius = self.lineEdit_top.text()
+                height = self.lineEdit_middle.text()
+                try:
+                    radius = float(radius)
+                    height = float(height)
+                except:
+                    if radius == '' or height == '':
+                        self.label_calculations.setText('One or more inputs are blank')
+                    else:
+                        self.label_calculations.setText('Enter a number for inputs')
+                else:
+                    self.label_calculations.setText(f'Area = {math.pi * (radius ** 2) * height}')
