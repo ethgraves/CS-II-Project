@@ -14,6 +14,9 @@ class Logic(QMainWindow, Ui_MainWindow):
         ['-', '-', '-', '-', '-']
     ]
     colors = ['-', '-', '-', '-', '-']
+    letters = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
+
+    num_guesses = 0
 
     with open('words_to_guess.txt', 'r') as file:
         all_words = file.readlines()
@@ -23,13 +26,14 @@ class Logic(QMainWindow, Ui_MainWindow):
         word_to_guess_letters = [*word_to_guess]
         word_to_guess_letters_copy = word_to_guess_letters[:]
 
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
         self.__box = 0
 
-        # DEBUG for Testing
+        # DEBUG
         self.label_debug.setText(Logic.word_to_guess)
 
         # Home Page
@@ -93,6 +97,7 @@ class Logic(QMainWindow, Ui_MainWindow):
     def valid_word_check(self, word):
         if '-' in Logic.guess[-1]:
             self.label_valid_or_not.setText('Too short')
+            self.label_valid_or_not.setStyleSheet('background-color: rgb(255, 255, 255)')
             return False
         else:
             with open('valid_words.txt', 'r') as file:
@@ -100,18 +105,20 @@ class Logic(QMainWindow, Ui_MainWindow):
                 word = ''.join(word)
                 word = word.lower()
                 if word in valid_words:
-                    self.label_valid_or_not.setText('Valid word')
+                    self.label_valid_or_not.setText('')
+                    self.label_valid_or_not.setStyleSheet('background-color:')
                     return True
                 else:
                     self.label_valid_or_not.setText('Not a valid word')
+                    self.label_valid_or_not.setStyleSheet('background-color: rgb(255, 255, 255)')
                     return False
 
-    #FIXME: Fix coloring stuff
     def check_for_win(self, word_letters):
         Logic.guess[-1] = [x.lower() for x in Logic.guess[-1]]
         for a in range(0, 5):
             if Logic.guess[-1][a] == Logic.word_to_guess_letters[a]:
                 Logic.colors[a] = 'background-color: rgb(0, 255, 0)'
+                self.coloring_keyboard(Logic.guess[-1][a], 'background-color: rgb(0, 255, 0)')
                 Logic.guess[-1][a] = '-'
                 Logic.word_to_guess_letters[a] = '~'
         for b in range(0, 5):
@@ -119,14 +126,333 @@ class Logic(QMainWindow, Ui_MainWindow):
                 for c in range(0, 5):
                     if Logic.guess[-1][b] == Logic.word_to_guess_letters[c]:
                         Logic.colors[b] = 'background-color: rgb(255, 255, 0)'
+                        self.coloring_keyboard(Logic.guess[-1][b], 'background-color: rgb(255, 255, 0)')
                         Logic.guess[-1][b] = '-'
                         Logic.word_to_guess_letters[c] = '~'
         for d in range(0 ,5):
             if Logic.colors[d] == '-':
                 Logic.colors[d] = 'background-color: rgb(150, 150, 150)'
+                self.coloring_keyboard(Logic.guess[-1][d], 'background-color: rgb(150, 150, 150)')
         Logic.word_to_guess_letters = Logic.word_to_guess_letters_copy[:]
-        print(Logic.word_to_guess_letters)
-        print(Logic.colors)
+
+    def coloring_keyboard(self, letter, color):
+        if color == 'background-color: rgb(0, 255, 0)':
+            if letter == 'q':
+                if letter in Logic.letters:
+                    self.pushButton_Q.setStyleSheet(color)
+                    Logic.letters.remove('q')
+            elif letter == 'w':
+                if letter in Logic.letters:
+                    self.pushButton_W.setStyleSheet(color)
+                    Logic.letters.remove('w')
+            elif letter == 'e':
+                if letter in Logic.letters:
+                    self.pushButton_E.setStyleSheet(color)
+                    Logic.letters.remove('e')
+            elif letter == 'r':
+                if letter in Logic.letters:
+                    self.pushButton_R.setStyleSheet(color)
+                    Logic.letters.remove('r')
+            elif letter == 't':
+                if letter in Logic.letters:
+                    self.pushButton_T.setStyleSheet(color)
+                    Logic.letters.remove('t')
+            elif letter == 'y':
+                if letter in Logic.letters:
+                    self.pushButton_Y.setStyleSheet(color)
+                    Logic.letters.remove('y')
+            elif letter == 'u':
+                if letter in Logic.letters:
+                    self.pushButton_U.setStyleSheet(color)
+                    Logic.letters.remove('u')
+            elif letter == 'i':
+                if letter in Logic.letters:
+                    self.pushButton_I.setStyleSheet(color)
+                    Logic.letters.remove('i')
+            elif letter == 'o':
+                if letter in Logic.letters:
+                    self.pushButton_O.setStyleSheet(color)
+                    Logic.letters.remove('o')
+            elif letter == 'p':
+                if letter in Logic.letters:
+                    self.pushButton_P.setStyleSheet(color)
+                    Logic.letters.remove('p')
+            elif letter == 'a':
+                if letter in Logic.letters:
+                    self.pushButton_A.setStyleSheet(color)
+                    Logic.letters.remove('a')
+            elif letter == 's':
+                if letter in Logic.letters:
+                    self.pushButton_S.setStyleSheet(color)
+                    Logic.letters.remove('s')
+            elif letter == 'd':
+                if letter in Logic.letters:
+                    self.pushButton_D.setStyleSheet(color)
+                    Logic.letters.remove('d')
+            elif letter == 'f':
+                if letter in Logic.letters:
+                    self.pushButton_F.setStyleSheet(color)
+                    Logic.letters.remove('f')
+            elif letter == 'g':
+                if letter in Logic.letters:
+                    self.pushButton_G.setStyleSheet(color)
+                    Logic.letters.remove('g')
+            elif letter == 'h':
+                if letter in Logic.letters:
+                    self.pushButton_H.setStyleSheet(color)
+                    Logic.letters.remove('h')
+            elif letter == 'j':
+                if letter in Logic.letters:
+                    self.pushButton_J.setStyleSheet(color)
+                    Logic.letters.remove('j')
+            elif letter == 'k':
+                if letter in Logic.letters:
+                    self.pushButton_K.setStyleSheet(color)
+                    Logic.letters.remove('k')
+            elif letter == 'l':
+                if letter in Logic.letters:
+                    self.pushButton_L.setStyleSheet(color)
+                    Logic.letters.remove('l')
+            elif letter == 'z':
+                if letter in Logic.letters:
+                    self.pushButton_Z.setStyleSheet(color)
+                    Logic.letters.remove('z')
+            elif letter == 'x':
+                if letter in Logic.letters:
+                    self.pushButton_X.setStyleSheet(color)
+                    Logic.letters.remove('x')
+            elif letter == 'c':
+                if letter in Logic.letters:
+                    self.pushButton_C.setStyleSheet(color)
+                    Logic.letters.remove('c')
+            elif letter == 'v':
+                if letter in Logic.letters:
+                    self.pushButton_V.setStyleSheet(color)
+                    Logic.letters.remove('v')
+            elif letter == 'b':
+                if letter in Logic.letters:
+                    self.pushButton_B.setStyleSheet(color)
+                    Logic.letters.remove('b')
+            elif letter == 'n':
+                if letter in Logic.letters:
+                    self.pushButton_N.setStyleSheet(color)
+                    Logic.letters.remove('n')
+            elif letter == 'm':
+                if letter in Logic.letters:
+                    self.pushButton_M.setStyleSheet(color)
+                    Logic.letters.remove('m')
+        elif color == 'background-color: rgb(255, 255, 0)':
+            if letter == 'q':
+                if letter in Logic.letters:
+                    self.pushButton_Q.setStyleSheet(color)
+                    Logic.letters.remove('q')
+            elif letter == 'w':
+                if letter in Logic.letters:
+                    self.pushButton_W.setStyleSheet(color)
+                    Logic.letters.remove('w')
+            elif letter == 'e':
+                if letter in Logic.letters:
+                    self.pushButton_E.setStyleSheet(color)
+                    Logic.letters.remove('e')
+            elif letter == 'r':
+                if letter in Logic.letters:
+                    self.pushButton_R.setStyleSheet(color)
+                    Logic.letters.remove('r')
+            elif letter == 't':
+                if letter in Logic.letters:
+                    self.pushButton_T.setStyleSheet(color)
+                    Logic.letters.remove('t')
+            elif letter == 'y':
+                if letter in Logic.letters:
+                    self.pushButton_Y.setStyleSheet(color)
+                    Logic.letters.remove('y')
+            elif letter == 'u':
+                if letter in Logic.letters:
+                    self.pushButton_U.setStyleSheet(color)
+                    Logic.letters.remove('u')
+            elif letter == 'i':
+                if letter in Logic.letters:
+                    self.pushButton_I.setStyleSheet(color)
+                    Logic.letters.remove('i')
+            elif letter == 'o':
+                if letter in Logic.letters:
+                    self.pushButton_O.setStyleSheet(color)
+                    Logic.letters.remove('o')
+            elif letter == 'p':
+                if letter in Logic.letters:
+                    self.pushButton_P.setStyleSheet(color)
+                    Logic.letters.remove('p')
+            elif letter == 'a':
+                if letter in Logic.letters:
+                    self.pushButton_A.setStyleSheet(color)
+                    Logic.letters.remove('a')
+            elif letter == 's':
+                if letter in Logic.letters:
+                    self.pushButton_S.setStyleSheet(color)
+                    Logic.letters.remove('s')
+            elif letter == 'd':
+                if letter in Logic.letters:
+                    self.pushButton_D.setStyleSheet(color)
+                    Logic.letters.remove('d')
+            elif letter == 'f':
+                if letter in Logic.letters:
+                    self.pushButton_F.setStyleSheet(color)
+                    Logic.letters.remove('f')
+            elif letter == 'g':
+                if letter in Logic.letters:
+                    self.pushButton_G.setStyleSheet(color)
+                    Logic.letters.remove('g')
+            elif letter == 'h':
+                if letter in Logic.letters:
+                    self.pushButton_H.setStyleSheet(color)
+                    Logic.letters.remove('h')
+            elif letter == 'j':
+                if letter in Logic.letters:
+                    self.pushButton_J.setStyleSheet(color)
+                    Logic.letters.remove('j')
+            elif letter == 'k':
+                if letter in Logic.letters:
+                    self.pushButton_K.setStyleSheet(color)
+                    Logic.letters.remove('k')
+            elif letter == 'l':
+                if letter in Logic.letters:
+                    self.pushButton_L.setStyleSheet(color)
+                    Logic.letters.remove('l')
+            elif letter == 'z':
+                if letter in Logic.letters:
+                    self.pushButton_Z.setStyleSheet(color)
+                    Logic.letters.remove('z')
+            elif letter == 'x':
+                if letter in Logic.letters:
+                    self.pushButton_X.setStyleSheet(color)
+                    Logic.letters.remove('x')
+            elif letter == 'c':
+                if letter in Logic.letters:
+                    self.pushButton_C.setStyleSheet(color)
+                    Logic.letters.remove('c')
+            elif letter == 'v':
+                if letter in Logic.letters:
+                    self.pushButton_V.setStyleSheet(color)
+                    Logic.letters.remove('v')
+            elif letter == 'b':
+                if letter in Logic.letters:
+                    self.pushButton_B.setStyleSheet(color)
+                    Logic.letters.remove('b')
+            elif letter == 'n':
+                if letter in Logic.letters:
+                    self.pushButton_N.setStyleSheet(color)
+                    Logic.letters.remove('n')
+            elif letter == 'm':
+                if letter in Logic.letters:
+                    self.pushButton_M.setStyleSheet(color)
+                    Logic.letters.remove('m')
+        elif color == 'background-color: rgb(150, 150, 150)':
+            if letter == 'q':
+                if letter in Logic.letters:
+                    self.pushButton_Q.setStyleSheet(color)
+                    Logic.letters.remove('q')
+            elif letter == 'w':
+                if letter in Logic.letters:
+                    self.pushButton_W.setStyleSheet(color)
+                    Logic.letters.remove('w')
+            elif letter == 'e':
+                if letter in Logic.letters:
+                    self.pushButton_E.setStyleSheet(color)
+                    Logic.letters.remove('e')
+            elif letter == 'r':
+                if letter in Logic.letters:
+                    self.pushButton_R.setStyleSheet(color)
+                    Logic.letters.remove('r')
+            elif letter == 't':
+                if letter in Logic.letters:
+                    self.pushButton_T.setStyleSheet(color)
+                    Logic.letters.remove('t')
+            elif letter == 'y':
+                if letter in Logic.letters:
+                    self.pushButton_Y.setStyleSheet(color)
+                    Logic.letters.remove('y')
+            elif letter == 'u':
+                if letter in Logic.letters:
+                    self.pushButton_U.setStyleSheet(color)
+                    Logic.letters.remove('u')
+            elif letter == 'i':
+                if letter in Logic.letters:
+                    self.pushButton_I.setStyleSheet(color)
+                    Logic.letters.remove('i')
+            elif letter == 'o':
+                if letter in Logic.letters:
+                    self.pushButton_O.setStyleSheet(color)
+                    Logic.letters.remove('o')
+            elif letter == 'p':
+                if letter in Logic.letters:
+                    self.pushButton_P.setStyleSheet(color)
+                    Logic.letters.remove('p')
+            elif letter == 'a':
+                if letter in Logic.letters:
+                    self.pushButton_A.setStyleSheet(color)
+                    Logic.letters.remove('a')
+            elif letter == 's':
+                if letter in Logic.letters:
+                    self.pushButton_S.setStyleSheet(color)
+                    Logic.letters.remove('s')
+            elif letter == 'd':
+                if letter in Logic.letters:
+                    self.pushButton_D.setStyleSheet(color)
+                    Logic.letters.remove('d')
+            elif letter == 'f':
+                if letter in Logic.letters:
+                    self.pushButton_F.setStyleSheet(color)
+                    Logic.letters.remove('f')
+            elif letter == 'g':
+                if letter in Logic.letters:
+                    self.pushButton_G.setStyleSheet(color)
+                    Logic.letters.remove('g')
+            elif letter == 'h':
+                if letter in Logic.letters:
+                    self.pushButton_H.setStyleSheet(color)
+                    Logic.letters.remove('h')
+            elif letter == 'j':
+                if letter in Logic.letters:
+                    self.pushButton_J.setStyleSheet(color)
+                    Logic.letters.remove('j')
+            elif letter == 'k':
+                if letter in Logic.letters:
+                    self.pushButton_K.setStyleSheet(color)
+                    Logic.letters.remove('k')
+            elif letter == 'l':
+                if letter in Logic.letters:
+                    self.pushButton_L.setStyleSheet(color)
+                    Logic.letters.remove('l')
+            elif letter == 'z':
+                if letter in Logic.letters:
+                    self.pushButton_Z.setStyleSheet(color)
+                    Logic.letters.remove('z')
+            elif letter == 'x':
+                if letter in Logic.letters:
+                    self.pushButton_X.setStyleSheet(color)
+                    Logic.letters.remove('x')
+            elif letter == 'c':
+                if letter in Logic.letters:
+                    self.pushButton_C.setStyleSheet(color)
+                    Logic.letters.remove('c')
+            elif letter == 'v':
+                if letter in Logic.letters:
+                    self.pushButton_V.setStyleSheet(color)
+                    Logic.letters.remove('v')
+            elif letter == 'b':
+                if letter in Logic.letters:
+                    self.pushButton_B.setStyleSheet(color)
+                    Logic.letters.remove('b')
+            elif letter == 'n':
+                if letter in Logic.letters:
+                    self.pushButton_N.setStyleSheet(color)
+                    Logic.letters.remove('n')
+            elif letter == 'm':
+                if letter in Logic.letters:
+                    self.pushButton_M.setStyleSheet(color)
+                    Logic.letters.remove('m')
+
+
 
     def coloring(self):
         if len(Logic.guess) == 1:
@@ -185,8 +511,6 @@ class Logic(QMainWindow, Ui_MainWindow):
 
     def adding_letter(self, letter, box):
         box = self.shifting_box(box)
-        print(Logic.guess)
-        print(box)
         if box == 1:
             self.label_R1_C1.setText(letter)
         elif box == 2:
@@ -257,14 +581,18 @@ class Logic(QMainWindow, Ui_MainWindow):
                 break
 
     def enter(self):
+        Logic.num_guesses += 1
         self.word_letters = Logic.guess[-1]
         if self.valid_word_check(self.word_letters) == True:
             win = self.check_for_win(self.word_letters)
             #TODO: Add events for winning and losing
-            if win == False:
-                pass
+            if Logic.colors[0] == Logic.colors[1] == Logic.colors[2] == Logic.colors[3] == Logic.colors[4] == 'background-color: rgb(0, 255, 0)':
+                self.stackedWidget.setCurrentIndex(2)
+                self.label_win_lose.setText('You Win!')
             else:
-                pass
+                if Logic.num_guesses == 6:
+                    self.stackedWidget.setCurrentIndex(2)
+                    self.label_win_lose.setText('You Lose!')
             self.coloring()
 
             Logic.guess.append(['-', '-', '-', '-', '-'])
@@ -274,9 +602,15 @@ class Logic(QMainWindow, Ui_MainWindow):
     # Home Page
     def guest(self):
         self.stackedWidget.setCurrentIndex(1)
+        #self.get_word_to_guess()
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Game Page
     def letter_guess(self, letter):
         box = self.letters_check(letter)
         self.adding_letter(letter, box)
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------
+    # Results Page
+    def play_again(self):
+        pass
