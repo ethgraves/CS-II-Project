@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import *
 from gui import *
 import math
 
+
 class Logic(QMainWindow, Ui_MainWindow):
     nums_in_box = ['~']
     math_function = ''
