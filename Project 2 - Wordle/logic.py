@@ -63,8 +63,8 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.pushButton_DELETE.clicked.connect(lambda: self.delete())
         self.pushButton_ENTER.clicked.connect(lambda: self.enter())
         self.pushButton_login.clicked.connect(lambda: self.login())
-        self.pushButton_playAgain.clicked.connect(lambda: self.play_again())
         self.pushButton_signup.clicked.connect(lambda: self.signup())
+        self.pushButton_playAgain.clicked.connect(lambda: self.play_again())
         self.pushButton_logout.clicked.connect(lambda: self.logout())
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -106,8 +106,6 @@ class Logic(QMainWindow, Ui_MainWindow):
 
         self.label_debug.setText(''.join(word_to_guess_letters))
         return word_to_guess_letters, word_to_guess_letters_copy
-
-
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Checks
@@ -707,10 +705,15 @@ class Logic(QMainWindow, Ui_MainWindow):
             if Logic.colors[0] == Logic.colors[1] == Logic.colors[2] == Logic.colors[3] == Logic.colors[4] == 'background-color: rgb(0, 255, 0)':
                 self.stackedWidget.setCurrentIndex(2)
                 self.label_win_lose.setText('You Win!')
+                file = open(Logic.username, 'a')
+                file.write(f'{Logic.num_guesses}\n')
+                file.close()
             else:
                 if Logic.num_guesses == 6:
                     self.stackedWidget.setCurrentIndex(2)
                     self.label_win_lose.setText('You Lose!')
+                    file = open(Logic.username, 'a')
+                    file.write(f'7\n')
             self.coloring()
 
             Logic.guess.append(['-', '-', '-', '-', '-'])
@@ -729,13 +732,17 @@ class Logic(QMainWindow, Ui_MainWindow):
             self.label.setText('Please enter username')
         else:
             try:
-                file = open(username + '.txt', 'a+')
+                file = open(username + '.txt', 'r')
             except FileNotFoundError:
                 self.label.setText('User does not exist')
             else:
                 self.stackedWidget.setCurrentIndex(1)
                 Logic.word_to_guess_determiner = 0
                 self.get_word_to_guess()
+                file.close()
+                file = open(username + '.txt', 'w')
+                file.close()
+                Logic.username = username + '.txt'
 
     def signup(self):
         username = self.lineEdit_signup.text()
@@ -743,19 +750,20 @@ class Logic(QMainWindow, Ui_MainWindow):
             self.label.setText('Please enter username')
         else:
             try:
-                file = open(username + '.txt', 'r+')
+                file = open(username + '.txt', 'r')
             except FileNotFoundError:
                 file = open(username + '.txt', 'w')
+                file.close()
                 self.stackedWidget.setCurrentIndex(1)
                 Logic.word_to_guess_determiner = 0
                 self.get_word_to_guess()
+                Logic.username = username + '.txt'
             else:
                 self.label.setText('User already exists')
                 file.close()
 
     def logout(self):
-        global username
-        print(username)
+        print(Logic.username)
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
