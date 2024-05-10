@@ -22,6 +22,8 @@ class Logic(QMainWindow, Ui_MainWindow):
 
     num_guesses = 0
 
+    username = ''
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -62,6 +64,8 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.pushButton_ENTER.clicked.connect(lambda: self.enter())
         self.pushButton_login.clicked.connect(lambda: self.login())
         self.pushButton_playAgain.clicked.connect(lambda: self.play_again())
+        self.pushButton_signup.clicked.connect(lambda: self.signup())
+        self.pushButton_logout.clicked.connect(lambda: self.logout())
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Getters and Setters
@@ -135,15 +139,10 @@ class Logic(QMainWindow, Ui_MainWindow):
                     return False
 
     def check_for_win(self, word_letters):
-        print(1)
-        print(Logic.word_to_guess_letters)
         Logic.guess[-1] = [x.lower() for x in Logic.guess[-1]]
         for a in range(0, 5):
-            print(2)
             if Logic.guess[-1][a] == Logic.word_to_guess_letters[a]:
-                print(3)
                 Logic.colors[a] = 'background-color: rgb(0, 255, 0)'
-                print(4)
                 self.coloring_keyboard(Logic.guess[-1][a], 'background-color: rgb(0, 255, 0)')
                 Logic.guess[-1][a] = '-'
                 Logic.word_to_guess_letters[a] = '~'
@@ -705,7 +704,6 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.word_letters = Logic.guess[-1]
         if self.valid_word_check(self.word_letters) == True:
             win = self.check_for_win(self.word_letters)
-            #TODO: Add events for winning and losing
             if Logic.colors[0] == Logic.colors[1] == Logic.colors[2] == Logic.colors[3] == Logic.colors[4] == 'background-color: rgb(0, 255, 0)':
                 self.stackedWidget.setCurrentIndex(2)
                 self.label_win_lose.setText('You Win!')
@@ -722,10 +720,43 @@ class Logic(QMainWindow, Ui_MainWindow):
     # Home Page
     def guest(self):
         self.stackedWidget.setCurrentIndex(1)
+        Logic.word_to_guess_determiner = 0
         self.get_word_to_guess()
 
     def login(self):
-        pass
+        username = self.lineEdit_login.text()
+        if username == '':
+            self.label.setText('Please enter username')
+        else:
+            try:
+                file = open(username + '.txt', 'a+')
+            except FileNotFoundError:
+                self.label.setText('User does not exist')
+            else:
+                self.stackedWidget.setCurrentIndex(1)
+                Logic.word_to_guess_determiner = 0
+                self.get_word_to_guess()
+
+    def signup(self):
+        username = self.lineEdit_signup.text()
+        if username == '':
+            self.label.setText('Please enter username')
+        else:
+            try:
+                file = open(username + '.txt', 'r+')
+            except FileNotFoundError:
+                file = open(username + '.txt', 'w')
+                self.stackedWidget.setCurrentIndex(1)
+                Logic.word_to_guess_determiner = 0
+                self.get_word_to_guess()
+            else:
+                self.label.setText('User already exists')
+                file.close()
+
+    def logout(self):
+        global username
+        print(username)
+
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Game Page
