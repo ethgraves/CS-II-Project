@@ -1,8 +1,14 @@
+from typing import Tuple, List, Any
+
 from PyQt6.QtWidgets import *
 from gui import *
 import random
 
 class Logic(QMainWindow, Ui_MainWindow):
+    """
+    Class used to play the wordle game.
+    Houses the class variables used in the code.
+    """
     guess = [
         ['-', '-', '-', '-', '-']
     ]
@@ -17,7 +23,10 @@ class Logic(QMainWindow, Ui_MainWindow):
 
     username = ''
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """
+        Sets the default variable for box and checks for the buttons the user clicks.
+        """
         super().__init__()
         self.setupUi(self)
 
@@ -71,10 +80,18 @@ class Logic(QMainWindow, Ui_MainWindow):
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Getters and Setters
-    def get_box(self):
+    def get_box(self) -> int:
+        """
+        Getter for the box private variable
+        :return: Box being used
+        """
         return self.__box
 
-    def set_box(self, value):
+    def set_box(self, value: int) -> None:
+        """
+        Changes the box variable to known what row and column the boxes should be used
+        :param value: Specification for how the box variable should change
+        """
         if value == 1:
             self.__box += value
         elif value == -1:
@@ -84,7 +101,11 @@ class Logic(QMainWindow, Ui_MainWindow):
         else:
             self.__box += value
 
-    def word_to_guess(self):
+    def word_to_guess(self) -> tuple[list[Any], list[Any]]:
+        """
+        Selects the word for the user to guess
+        :return: The word to guess as a list and a copy of that list
+        """
         random.seed = random.randint(0,100000000000)
         with open('words_to_guess.txt', 'r') as file:
             all_words = file.readlines()
@@ -96,7 +117,11 @@ class Logic(QMainWindow, Ui_MainWindow):
 
         return word_to_guess_letters, word_to_guess_letters_copy
 
-    def get_word_to_guess(self):
+    def get_word_to_guess(self) -> tuple[list[Any], list[Any]]:
+        """
+        Determines whether selecting a new word is needed
+        :return: The word to guess as a list and a copy of that list
+        """
         if Logic.word_to_guess_determiner == 0:
             word_to_guess_letters, word_to_guess_letters_copy = self.word_to_guess()
             Logic.word_to_guess_letters = word_to_guess_letters
@@ -112,7 +137,12 @@ class Logic(QMainWindow, Ui_MainWindow):
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Checks
-    def letters_check(self, letter):
+    def letters_check(self, letter: str) -> int:
+        """
+        Increments the box as necessary and checks if a spot is empty
+        :param letter: Letter the user clicked
+        :return: The box
+        """
         self.set_box(0)
         for c in range(5):
             self.set_box(1)
@@ -120,7 +150,12 @@ class Logic(QMainWindow, Ui_MainWindow):
                 Logic.guess[-1][c] = letter
                 return self.get_box()
 
-    def valid_word_check(self, word):
+    def valid_word_check(self, word: list) -> bool:
+        """
+        Checks to see if the word the user guessed is valid or invalid
+        :param word: The word the user guessed
+        :return: A boolean value; True if word is a valid word, False if word is an invalid word
+        """
         if '-' in Logic.guess[-1]:
             self.label_valid_or_not.setText('Too short')
             self.label_valid_or_not.setStyleSheet('background-color: rgb(255, 255, 255)')
@@ -139,7 +174,11 @@ class Logic(QMainWindow, Ui_MainWindow):
                     self.label_valid_or_not.setStyleSheet('background-color: rgb(255, 255, 255)')
                     return False
 
-    def check_for_win(self, word_letters):
+    def check_for_win(self, word_letters: list) -> None:
+        """
+        Checks the letters of the guessed word and appends the colors to a list to be used later
+        :param word_letters: A list where each element of the list is a letter of the word the user guessed
+        """
         Logic.guess[-1] = [x.lower() for x in Logic.guess[-1]]
         for a in range(0, 5):
             if Logic.guess[-1][a] == Logic.word_to_guess_letters[a]:
@@ -161,8 +200,12 @@ class Logic(QMainWindow, Ui_MainWindow):
                 self.coloring_keyboard(Logic.guess[-1][d], 'background-color: rgb(150, 150, 150)')
         Logic.word_to_guess_letters = Logic.word_to_guess_letters_copy[:]
 
-    def coloring_keyboard(self, letter, color):
-
+    def coloring_keyboard(self, letter: str, color: str) -> None:
+        """
+        Colors the letters on the keyboard the same color as the boxes
+        :param letter: The letter of the word guessed
+        :param color: The rgb value for the colors green, yellow, or gray
+        """
         if color == 'background-color: rgb(0, 255, 0)':
             if letter == 'q':
                 if letter in Logic.letters:
@@ -481,7 +524,10 @@ class Logic(QMainWindow, Ui_MainWindow):
 
 
 
-    def coloring(self):
+    def coloring(self) -> None:
+        """
+        Colors each box accordingly
+        """
         if len(Logic.guess) == 1:
             self.label_R1_C1.setStyleSheet(Logic.colors[0])
             self.label_R1_C2.setStyleSheet(Logic.colors[1])
@@ -522,7 +568,12 @@ class Logic(QMainWindow, Ui_MainWindow):
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Functions
-    def shifting_box(self, box):
+    def shifting_box(self, box: int) -> int:
+        """
+        Shifts the box variable depending on the row being used
+        :param box: The box being used
+        :return: The box (which has been changed)
+        """
         if len(Logic.guess) == 2 and self.get_box() <= 5:
             self.set_box(5)
         elif len(Logic.guess) == 3 and self.get_box() <= 10:
@@ -536,7 +587,12 @@ class Logic(QMainWindow, Ui_MainWindow):
         return self.get_box()
 
 
-    def adding_letter(self, letter, box):
+    def adding_letter(self, letter: str, box: int) -> None:
+        """
+        Adds the guessed letter to the box
+        :param letter: The letter input by the user
+        :param box: The int assigned to the box
+        """
         box = self.shifting_box(box)
         if box == 1:
             self.label_R1_C1.setText(letter)
@@ -599,7 +655,10 @@ class Logic(QMainWindow, Ui_MainWindow):
         elif box == 30:
             self.label_R6_C5.setText(letter)
 
-    def clear_game(self):
+    def clear_game(self) -> None:
+        """
+        Clears the game and colors, resetting it for the next time user plays
+        """
         self.label_R1_C1.setText('')
         self.label_R1_C2.setText('')
         self.label_R1_C3.setText('')
@@ -693,7 +752,10 @@ class Logic(QMainWindow, Ui_MainWindow):
         Logic.num_guesses = 0
 
 
-    def delete(self):
+    def delete(self) -> None:
+        """
+        Deletes a letter when the user presses the delete button
+        """
         self.label_valid_or_not.setText('')
         self.label_valid_or_not.setStyleSheet('background-color:')
         for c in range(4, -1, -1):
@@ -703,7 +765,11 @@ class Logic(QMainWindow, Ui_MainWindow):
                 self.set_box(-1)
                 break
 
-    def enter(self):
+    def enter(self) -> None:
+        """
+        Submits the word the user guessed when the user presses the enter button.
+        Checks for win/lose and switches to results page.
+        """
         self.word_letters = Logic.guess[-1]
         if self.valid_word_check(self.word_letters) == True:
             Logic.num_guesses += 1
@@ -730,7 +796,10 @@ class Logic(QMainWindow, Ui_MainWindow):
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Home Page
-    def guest(self):
+    def guest(self) -> None:
+        """
+        Creates a guest account if user selects "Play as Guest"
+        """
         Logic.username = 'guest_account.txt'
         file = open(Logic.username, 'w')
         file.close()
@@ -738,7 +807,10 @@ class Logic(QMainWindow, Ui_MainWindow):
         Logic.word_to_guess_determiner = 0
         self.get_word_to_guess()
 
-    def login(self):
+    def login(self) -> None:
+        """
+        Logs user in to their account if it exists
+        """
         username = self.lineEdit_login.text()
         if username == '':
             self.label.setText('Please enter username')
@@ -754,7 +826,10 @@ class Logic(QMainWindow, Ui_MainWindow):
                 file.close()
                 Logic.username = username + '.txt'
 
-    def signup(self):
+    def signup(self) -> None:
+        """
+        Creates a new account for the user if the account does not already exist
+        """
         username = self.lineEdit_signup.text()
         if username == '':
             self.label.setText('Please enter username')
@@ -774,17 +849,27 @@ class Logic(QMainWindow, Ui_MainWindow):
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Game Page
-    def letter_guess(self, letter):
+    def letter_guess(self, letter: str) -> None:
+        """
+        Takes the letter the user inputs and sends it to different functions to be used
+        :param letter: Letter the user guesses
+        """
         self.label_valid_or_not.setText('')
         self.label_valid_or_not.setStyleSheet('background-color:')
         box = self.letters_check(letter)
         self.adding_letter(letter, box)
 
-    def go_to_home_page(self):
+    def go_to_home_page(self) -> None:
+        """
+        Sends user back to the home page
+        """
         self.stackedWidget.setCurrentIndex(0)
         self.clear_game()
 
-    def quit(self):
+    def quit(self) -> None:
+        """
+        Sends user to the results page as a lost game
+        """
         self.stackedWidget.setCurrentIndex(2)
         self.label_win_lose.setText('You Lose!')
         file = open(Logic.username, 'a')
@@ -796,18 +881,27 @@ class Logic(QMainWindow, Ui_MainWindow):
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Results Page
-    def play_again(self):
+    def play_again(self) -> None:
+        """
+        Sends user to the game page to play the game again
+        """
         self.stackedWidget.setCurrentIndex(1)
         self.clear_game()
         Logic.word_to_guess_determiner = 0
         self.get_word_to_guess()
 
-    def see_stats(self):
+    def see_stats(self) -> None:
+        """
+        Sends user to the statistics page
+        """
         self.stackedWidget.setCurrentIndex(3)
         self.statistics()
 
 
-    def logout(self):
+    def logout(self) -> None:
+        """
+        Sends user to the home page and logs them out of their account
+        """
         self.stackedWidget.setCurrentIndex(0)
         self.clear_game()
         self.lineEdit_login.setText('')
@@ -815,7 +909,10 @@ class Logic(QMainWindow, Ui_MainWindow):
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
     # Statistics Page
-    def statistics(self):
+    def statistics(self) -> None:
+        """
+        Shows the user their own statistics
+        """
         file = open(Logic.username, 'r')
         file_lines = file.readlines()
         file_lines = [x.replace('\n', '') for x in file_lines]
