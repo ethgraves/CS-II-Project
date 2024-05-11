@@ -85,7 +85,7 @@ class Logic(QMainWindow, Ui_MainWindow):
             self.__box += value
 
     def word_to_guess(self):
-        random.seed = random.randint(0,100000)
+        random.seed = random.randint(0,100000000000)
         with open('words_to_guess.txt', 'r') as file:
             all_words = file.readlines()
             word_to_guess = all_words[random.randint(0, (len(all_words) - 1))]
@@ -106,6 +106,7 @@ class Logic(QMainWindow, Ui_MainWindow):
             word_to_guess_letters = Logic.word_to_guess_letters
             word_to_guess_letters_copy = Logic.word_to_guess_letters_copy
 
+        # DEBUG: Shows the word to guess
         #self.label_debug.setText(''.join(word_to_guess_letters))
         return word_to_guess_letters, word_to_guess_letters_copy
 
@@ -813,7 +814,7 @@ class Logic(QMainWindow, Ui_MainWindow):
         self.lineEdit_signup.setText('')
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------
-    # Results Page
+    # Statistics Page
     def statistics(self):
         file = open(Logic.username, 'r')
         file_lines = file.readlines()

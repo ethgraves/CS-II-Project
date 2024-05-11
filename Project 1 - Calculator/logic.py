@@ -49,7 +49,6 @@ class Logic(QMainWindow, Ui_MainWindow):
             return False
 
     def box_empty_check(self):
-        #if (Logic.nums_in_box[0] == '~') or (Logic.nums_in_box[0] == 0 and Logic.math_function >= 1) or (Logic.nums_in_box[0] == 1 and Logic.math_function >= 1):
         if Logic.nums_in_box[0] == '~':
             return True
         else:
